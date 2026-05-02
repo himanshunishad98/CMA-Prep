@@ -1,0 +1,1221 @@
+{
+  "version": "1.0",
+  "format": "mcq-test-series",
+  "meta": {
+    "title": "Untitled Test Series",
+    "subject": null,
+    "duration": 60,
+    "passingPercentage": 40,
+    "instructions": null,
+    "totalQuestions": 100,
+    "difficulty": {
+      "easy": 43,
+      "medium": 57,
+      "hard": 0
+    },
+    "createdAt": "2026-04-29T13:54:15.333Z",
+    "generatedFrom": "hegp1ps.pdf"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "q": "What is the main goal of the National Education Policy 2020?",
+      "opts": [
+        "To promote vocational education",
+        "To enhance analytical capabilities",
+        "To prepare students for the 21st century",
+        "To reduce curriculum content"
+      ],
+      "diff": "easy",
+      "ans": 2
+    },
+    {
+      "id": 2,
+      "q": "What is the role of the National Council of Educational Research and Training (NCERT)?",
+      "opts": [
+        "To develop high-quality textbooks",
+        "To conduct research in education",
+        "To train teachers",
+        "To promote Indian Knowledge Systems (IKS)"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 3,
+      "q": "What is the name of the textbook of mathematics for Grade 8 (Part 1)?",
+      "opts": [
+        "Ganita Prakash",
+        "Mathematics for Grade 8",
+        "National Council of Educational Research and Training",
+        "Textbook of Mathematics"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 4,
+      "q": "What is the main focus of the textbook Ganita Prakash?",
+      "opts": [
+        "To make learning fun and engaging",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 5,
+      "q": "What is the significance of mathematics in school education?",
+      "opts": [
+        "It helps develop basic arithmetic skills",
+        "It contributes to the development of capacities to make informed choices and decisions",
+        "It is only useful for science and social science",
+        "It is not essential for overall school education"
+      ],
+      "diff": "medium",
+      "ans": 1
+    },
+    {
+      "id": 6,
+      "q": "What is the role of mathematics at the Middle Stage?",
+      "opts": [
+        "To develop intuition and rigour",
+        "To focus on abstract concepts",
+        "To prepare students for secondary stage",
+        "To develop artistic and creative skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 7,
+      "q": "What is the main challenge of learning mathematics at the Middle Stage?",
+      "opts": [
+        "It is too abstract",
+        "It is too close to the experience and environment of a learner",
+        "It requires a balance between intuition and rigour",
+        "It is not challenging at all"
+      ],
+      "diff": "medium",
+      "ans": 2
+    },
+    {
+      "id": 8,
+      "q": "What is the main goal of the Chapter 1: A Square and A Cube?",
+      "opts": [
+        "To introduce special types of numbers",
+        "To discuss quadrilaterals",
+        "To explore number play",
+        "To reveal the story of numbers"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 9,
+      "q": "What is the significance of the Chapter 2: Power Play?",
+      "opts": [
+        "It discusses short and logical ways of expressing very large numbers",
+        "It introduces squares and cubes",
+        "It explores number play",
+        "It reveals the story of numbers"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 10,
+      "q": "What is the main focus of the Chapter 3: A Story of Numbers?",
+      "opts": [
+        "To reveal how the idea of number and number representation evolved over time",
+        "To discuss quadrilaterals",
+        "To explore number play",
+        "To introduce squares and cubes"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 11,
+      "q": "What is the significance of the Chapter 4: Quadrilaterals?",
+      "opts": [
+        "It discusses interesting types of four-sided figures and problems based on them",
+        "It introduces squares and cubes",
+        "It explores number play",
+        "It reveals the story of numbers"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 12,
+      "q": "What is the main goal of the Chapter 5: Number Play?",
+      "opts": [
+        "To show different properties of numbers",
+        "To discuss quadrilaterals",
+        "To introduce squares and cubes",
+        "To reveal the story of numbers"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 13,
+      "q": "What is the role of school libraries in the development of this textbook?",
+      "opts": [
+        "To provide resources for students to explore",
+        "To develop the textbook content",
+        "To train teachers",
+        "To promote Indian Knowledge Systems (IKS)"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 14,
+      "q": "What is the significance of the National Curriculum Framework for School Education (NCF-SE) 2023?",
+      "opts": [
+        "It aims to equip students with skills needed to grow",
+        "It focuses on advanced mathematical concepts",
+        "It prepares students for competitive exams",
+        "It develops critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 15,
+      "q": "What is the main focus of the textbook in terms of learning mathematics?",
+      "opts": [
+        "To make learning fun and engaging",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 16,
+      "q": "What is the role of the teacher in the classroom according to the textbook?",
+      "opts": [
+        "To provide direct instruction",
+        "To facilitate student-student and student-teacher interaction",
+        "To focus on individual learning",
+        "To develop artistic and creative skills"
+      ],
+      "diff": "medium",
+      "ans": 1
+    },
+    {
+      "id": 17,
+      "q": "What is the significance of open-ended questions in the textbook?",
+      "opts": [
+        "To stimulate classroom discussion",
+        "To focus on individual learning",
+        "To develop critical thinking skills",
+        "To prepare students for competitive exams"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 18,
+      "q": "What is the main goal of the textbook in terms of student development?",
+      "opts": [
+        "To develop intuition and rigour",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 19,
+      "q": "What is the role of mathematics in understanding concepts in other school subjects?",
+      "opts": [
+        "It plays a crucial role",
+        "It is not essential",
+        "It is only useful for science and social science",
+        "It is not relevant"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 20,
+      "q": "What is the significance of the Middle Stage in the educational journey of a student?",
+      "opts": [
+        "It is a critical three-year bridge between the Preparatory and Secondary Stages",
+        "It is a preparatory stage for the secondary stage",
+        "It is a stage that focuses on advanced mathematical concepts",
+        "It is a stage that develops critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 21,
+      "q": "What is the main focus of the National Education Policy 2020 in terms of education?",
+      "opts": [
+        "To promote vocational education",
+        "To enhance analytical capabilities",
+        "To prepare students for the 21st century",
+        "To reduce curriculum content"
+      ],
+      "diff": "easy",
+      "ans": 2
+    },
+    {
+      "id": 22,
+      "q": "What is the role of the National Council of Educational Research and Training (NCERT) in developing textbooks?",
+      "opts": [
+        "To develop high-quality textbooks",
+        "To conduct research in education",
+        "To train teachers",
+        "To promote Indian Knowledge Systems (IKS)"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 23,
+      "q": "What is the significance of the textbook Ganita Prakash in the context of mathematics education?",
+      "opts": [
+        "It makes learning fun and engaging",
+        "It focuses on advanced mathematical concepts",
+        "It prepares students for competitive exams",
+        "It develops critical thinking skills"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 24,
+      "q": "What is the main goal of the Chapter 1: A Square and A Cube in terms of student learning?",
+      "opts": [
+        "To introduce special types of numbers",
+        "To discuss quadrilaterals",
+        "To explore number play",
+        "To reveal the story of numbers"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 25,
+      "q": "What is the significance of the Chapter 2: Power Play in terms of mathematical concepts?",
+      "opts": [
+        "It discusses short and logical ways of expressing very large numbers",
+        "It introduces squares and cubes",
+        "It explores number play",
+        "It reveals the story of numbers"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 26,
+      "q": "What is the main focus of the Chapter 3: A Story of Numbers in terms of mathematical concepts?",
+      "opts": [
+        "To reveal how the idea of number and number representation evolved over time",
+        "To discuss quadrilaterals",
+        "To explore number play",
+        "To introduce squares and cubes"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 27,
+      "q": "What is the significance of the Chapter 4: Quadrilaterals in terms of mathematical concepts?",
+      "opts": [
+        "It discusses interesting types of four-sided figures and problems based on them",
+        "It introduces squares and cubes",
+        "It explores number play",
+        "It reveals the story of numbers"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 28,
+      "q": "What is the main goal of the Chapter 5: Number Play in terms of student learning?",
+      "opts": [
+        "To show different properties of numbers",
+        "To discuss quadrilaterals",
+        "To introduce squares and cubes",
+        "To reveal the story of numbers"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 29,
+      "q": "What is the role of school libraries in supporting student learning?",
+      "opts": [
+        "To provide resources for students to explore",
+        "To develop the textbook content",
+        "To train teachers",
+        "To promote Indian Knowledge Systems (IKS)"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 30,
+      "q": "What is the significance of the National Curriculum Framework for School Education (NCF-SE) 2023 in terms of student development?",
+      "opts": [
+        "It aims to equip students with skills needed to grow",
+        "It focuses on advanced mathematical concepts",
+        "It prepares students for competitive exams",
+        "It develops critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 31,
+      "q": "What is the main focus of the textbook in terms of learning mathematics?",
+      "opts": [
+        "To make learning fun and engaging",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 32,
+      "q": "What is the role of the teacher in the classroom according to the textbook?",
+      "opts": [
+        "To provide direct instruction",
+        "To facilitate student-student and student-teacher interaction",
+        "To focus on individual learning",
+        "To develop artistic and creative skills"
+      ],
+      "diff": "medium",
+      "ans": 1
+    },
+    {
+      "id": 33,
+      "q": "What is the significance of open-ended questions in the textbook?",
+      "opts": [
+        "To stimulate classroom discussion",
+        "To focus on individual learning",
+        "To develop critical thinking skills",
+        "To prepare students for competitive exams"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 34,
+      "q": "What is the main goal of the textbook in terms of student development?",
+      "opts": [
+        "To develop intuition and rigour",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 35,
+      "q": "What is the role of mathematics in understanding concepts in other school subjects?",
+      "opts": [
+        "It plays a crucial role",
+        "It is not essential",
+        "It is only useful for science and social science",
+        "It is not relevant"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 36,
+      "q": "What is the significance of the Middle Stage in the educational journey of a student?",
+      "opts": [
+        "It is a critical three-year bridge between the Preparatory and Secondary Stages",
+        "It is a preparatory stage for the secondary stage",
+        "It is a stage that focuses on advanced mathematical concepts",
+        "It is a stage that develops critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 37,
+      "q": "What is the main focus of the National Education Policy 2020 in terms of education?",
+      "opts": [
+        "To promote vocational education",
+        "To enhance analytical capabilities",
+        "To prepare students for the 21st century",
+        "To reduce curriculum content"
+      ],
+      "diff": "easy",
+      "ans": 2
+    },
+    {
+      "id": 38,
+      "q": "What is the role of the National Council of Educational Research and Training (NCERT) in developing textbooks?",
+      "opts": [
+        "To develop high-quality textbooks",
+        "To conduct research in education",
+        "To train teachers",
+        "To promote Indian Knowledge Systems (IKS)"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 39,
+      "q": "What is the significance of the textbook Ganita Prakash in the context of mathematics education?",
+      "opts": [
+        "It makes learning fun and engaging",
+        "It focuses on advanced mathematical concepts",
+        "It prepares students for competitive exams",
+        "It develops critical thinking skills"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 40,
+      "q": "What is the main goal of the Chapter 1: A Square and A Cube in terms of student learning?",
+      "opts": [
+        "To introduce special types of numbers",
+        "To discuss quadrilaterals",
+        "To explore number play",
+        "To reveal the story of numbers"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 41,
+      "q": "What is the significance of the Chapter 2: Power Play in terms of mathematical concepts?",
+      "opts": [
+        "It discusses short and logical ways of expressing very large numbers",
+        "It introduces squares and cubes",
+        "It explores number play",
+        "It reveals the story of numbers"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 42,
+      "q": "What is the main focus of the Chapter 3: A Story of Numbers in terms of mathematical concepts?",
+      "opts": [
+        "To reveal how the idea of number and number representation evolved over time",
+        "To discuss quadrilaterals",
+        "To explore number play",
+        "To introduce squares and cubes"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 43,
+      "q": "What is the significance of the Chapter 4: Quadrilaterals in terms of mathematical concepts?",
+      "opts": [
+        "It discusses interesting types of four-sided figures and problems based on them",
+        "It introduces squares and cubes",
+        "It explores number play",
+        "It reveals the story of numbers"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 44,
+      "q": "What is the main goal of the Chapter 5: Number Play in terms of student learning?",
+      "opts": [
+        "To show different properties of numbers",
+        "To discuss quadrilaterals",
+        "To introduce squares and cubes",
+        "To reveal the story of numbers"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 45,
+      "q": "What is the role of school libraries in supporting student learning?",
+      "opts": [
+        "To provide resources for students to explore",
+        "To develop the textbook content",
+        "To train teachers",
+        "To promote Indian Knowledge Systems (IKS)"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 46,
+      "q": "What is the significance of the National Curriculum Framework for School Education (NCF-SE) 2023 in terms of student development?",
+      "opts": [
+        "It aims to equip students with skills needed to grow",
+        "It focuses on advanced mathematical concepts",
+        "It prepares students for competitive exams",
+        "It develops critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 47,
+      "q": "What is the main focus of the textbook in terms of learning mathematics?",
+      "opts": [
+        "To make learning fun and engaging",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 48,
+      "q": "What is the role of the teacher in the classroom according to the textbook?",
+      "opts": [
+        "To provide direct instruction",
+        "To facilitate student-student and student-teacher interaction",
+        "To focus on individual learning",
+        "To develop artistic and creative skills"
+      ],
+      "diff": "medium",
+      "ans": 1
+    },
+    {
+      "id": 49,
+      "q": "What is the significance of open-ended questions in the textbook?",
+      "opts": [
+        "To stimulate classroom discussion",
+        "To focus on individual learning",
+        "To develop critical thinking skills",
+        "To prepare students for competitive exams"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 50,
+      "q": "What is the main goal of the textbook in terms of student development?",
+      "opts": [
+        "To develop intuition and rigour",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 51,
+      "q": "What is the role of mathematics in understanding concepts in other school subjects?",
+      "opts": [
+        "It plays a crucial role",
+        "It is not essential",
+        "It is only useful for science and social science",
+        "It is not relevant"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 52,
+      "q": "What is the significance of the Middle Stage in the educational journey of a student?",
+      "opts": [
+        "It is a critical three-year bridge between the Preparatory and Secondary Stages",
+        "It is a preparatory stage for the secondary stage",
+        "It is a stage that focuses on advanced mathematical concepts",
+        "It is a stage that develops critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 53,
+      "q": "What is the main focus of the National Education Policy 2020 in terms of education?",
+      "opts": [
+        "To promote vocational education",
+        "To enhance analytical capabilities",
+        "To prepare students for the 21st century",
+        "To reduce curriculum content"
+      ],
+      "diff": "easy",
+      "ans": 2
+    },
+    {
+      "id": 54,
+      "q": "What is the role of the National Council of Educational Research and Training (NCERT) in developing textbooks?",
+      "opts": [
+        "To develop high-quality textbooks",
+        "To conduct research in education",
+        "To train teachers",
+        "To promote Indian Knowledge Systems (IKS)"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 55,
+      "q": "What is the significance of the textbook Ganita Prakash in the context of mathematics education?",
+      "opts": [
+        "It makes learning fun and engaging",
+        "It focuses on advanced mathematical concepts",
+        "It prepares students for competitive exams",
+        "It develops critical thinking skills"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 56,
+      "q": "What is the main goal of the Chapter 1: A Square and A Cube in terms of student learning?",
+      "opts": [
+        "To introduce special types of numbers",
+        "To discuss quadrilaterals",
+        "To explore number play",
+        "To reveal the story of numbers"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 57,
+      "q": "What is the significance of the Chapter 2: Power Play in terms of mathematical concepts?",
+      "opts": [
+        "It discusses short and logical ways of expressing very large numbers",
+        "It introduces squares and cubes",
+        "It explores number play",
+        "It reveals the story of numbers"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 58,
+      "q": "What is the main focus of the Chapter 3: A Story of Numbers in terms of mathematical concepts?",
+      "opts": [
+        "To reveal how the idea of number and number representation evolved over time",
+        "To discuss quadrilaterals",
+        "To explore number play",
+        "To introduce squares and cubes"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 59,
+      "q": "What is the significance of the Chapter 4: Quadrilaterals in terms of mathematical concepts?",
+      "opts": [
+        "It discusses interesting types of four-sided figures and problems based on them",
+        "It introduces squares and cubes",
+        "It explores number play",
+        "It reveals the story of numbers"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 60,
+      "q": "What is the main goal of the Chapter 5: Number Play in terms of student learning?",
+      "opts": [
+        "To show different properties of numbers",
+        "To discuss quadrilaterals",
+        "To introduce squares and cubes",
+        "To reveal the story of numbers"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 61,
+      "q": "What is the role of school libraries in supporting student learning?",
+      "opts": [
+        "To provide resources for students to explore",
+        "To develop the textbook content",
+        "To train teachers",
+        "To promote Indian Knowledge Systems (IKS)"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 62,
+      "q": "What is the significance of the National Curriculum Framework for School Education (NCF-SE) 2023 in terms of student development?",
+      "opts": [
+        "It aims to equip students with skills needed to grow",
+        "It focuses on advanced mathematical concepts",
+        "It prepares students for competitive exams",
+        "It develops critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 63,
+      "q": "What is the main focus of the textbook in terms of learning mathematics?",
+      "opts": [
+        "To make learning fun and engaging",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 64,
+      "q": "What is the role of the teacher in the classroom according to the textbook?",
+      "opts": [
+        "To provide direct instruction",
+        "To facilitate student-student and student-teacher interaction",
+        "To focus on individual learning",
+        "To develop artistic and creative skills"
+      ],
+      "diff": "medium",
+      "ans": 1
+    },
+    {
+      "id": 65,
+      "q": "What is the significance of open-ended questions in the textbook?",
+      "opts": [
+        "To stimulate classroom discussion",
+        "To focus on individual learning",
+        "To develop critical thinking skills",
+        "To prepare students for competitive exams"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 66,
+      "q": "What is the main goal of the textbook in terms of student development?",
+      "opts": [
+        "To develop intuition and rigour",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 67,
+      "q": "What is the role of mathematics in understanding concepts in other school subjects?",
+      "opts": [
+        "It plays a crucial role",
+        "It is not essential",
+        "It is only useful for science and social science",
+        "It is not relevant"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 68,
+      "q": "What is the significance of the Middle Stage in the educational journey of a student?",
+      "opts": [
+        "It is a critical three-year bridge between the Preparatory and Secondary Stages",
+        "It is a preparatory stage for the secondary stage",
+        "It is a stage that focuses on advanced mathematical concepts",
+        "It is a stage that develops critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 69,
+      "q": "What is the main focus of the National Education Policy 2020 in terms of education?",
+      "opts": [
+        "To promote vocational education",
+        "To enhance analytical capabilities",
+        "To prepare students for the 21st century",
+        "To reduce curriculum content"
+      ],
+      "diff": "easy",
+      "ans": 2
+    },
+    {
+      "id": 70,
+      "q": "What is the role of the National Council of Educational Research and Training (NCERT) in developing textbooks?",
+      "opts": [
+        "To develop high-quality textbooks",
+        "To conduct research in education",
+        "To train teachers",
+        "To promote Indian Knowledge Systems (IKS)"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 71,
+      "q": "What is the significance of the textbook Ganita Prakash in the context of mathematics education?",
+      "opts": [
+        "It makes learning fun and engaging",
+        "It focuses on advanced mathematical concepts",
+        "It prepares students for competitive exams",
+        "It develops critical thinking skills"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 72,
+      "q": "What is the main goal of the Chapter 1: A Square and A Cube in terms of student learning?",
+      "opts": [
+        "To introduce special types of numbers",
+        "To discuss quadrilaterals",
+        "To explore number play",
+        "To reveal the story of numbers"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 73,
+      "q": "What is the significance of the Chapter 2: Power Play in terms of mathematical concepts?",
+      "opts": [
+        "It discusses short and logical ways of expressing very large numbers",
+        "It introduces squares and cubes",
+        "It explores number play",
+        "It reveals the story of numbers"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 74,
+      "q": "What is the main focus of the Chapter 3: A Story of Numbers in terms of mathematical concepts?",
+      "opts": [
+        "To reveal how the idea of number and number representation evolved over time",
+        "To discuss quadrilaterals",
+        "To explore number play",
+        "To introduce squares and cubes"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 75,
+      "q": "What is the significance of the Chapter 4: Quadrilaterals in terms of mathematical concepts?",
+      "opts": [
+        "It discusses interesting types of four-sided figures and problems based on them",
+        "It introduces squares and cubes",
+        "It explores number play",
+        "It reveals the story of numbers"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 76,
+      "q": "What is the main goal of the Chapter 5: Number Play in terms of student learning?",
+      "opts": [
+        "To show different properties of numbers",
+        "To discuss quadrilaterals",
+        "To introduce squares and cubes",
+        "To reveal the story of numbers"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 77,
+      "q": "What is the role of school libraries in supporting student learning?",
+      "opts": [
+        "To provide resources for students to explore",
+        "To develop the textbook content",
+        "To train teachers",
+        "To promote Indian Knowledge Systems (IKS)"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 78,
+      "q": "What is the significance of the National Curriculum Framework for School Education (NCF-SE) 2023 in terms of student development?",
+      "opts": [
+        "It aims to equip students with skills needed to grow",
+        "It focuses on advanced mathematical concepts",
+        "It prepares students for competitive exams",
+        "It develops critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 79,
+      "q": "What is the main focus of the textbook in terms of learning mathematics?",
+      "opts": [
+        "To make learning fun and engaging",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 80,
+      "q": "What is the role of the teacher in the classroom according to the textbook?",
+      "opts": [
+        "To provide direct instruction",
+        "To facilitate student-student and student-teacher interaction",
+        "To focus on individual learning",
+        "To develop artistic and creative skills"
+      ],
+      "diff": "medium",
+      "ans": 1
+    },
+    {
+      "id": 81,
+      "q": "What is the significance of open-ended questions in the textbook?",
+      "opts": [
+        "To stimulate classroom discussion",
+        "To focus on individual learning",
+        "To develop critical thinking skills",
+        "To prepare students for competitive exams"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 82,
+      "q": "What is the main goal of the textbook in terms of student development?",
+      "opts": [
+        "To develop intuition and rigour",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 83,
+      "q": "What is the role of mathematics in understanding concepts in other school subjects?",
+      "opts": [
+        "It plays a crucial role",
+        "It is not essential",
+        "It is only useful for science and social science",
+        "It is not relevant"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 84,
+      "q": "What is the significance of the Middle Stage in the educational journey of a student?",
+      "opts": [
+        "It is a critical three-year bridge between the Preparatory and Secondary Stages",
+        "It is a preparatory stage for the secondary stage",
+        "It is a stage that focuses on advanced mathematical concepts",
+        "It is a stage that develops critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 85,
+      "q": "What is the main focus of the National Education Policy 2020 in terms of education?",
+      "opts": [
+        "To promote vocational education",
+        "To enhance analytical capabilities",
+        "To prepare students for the 21st century",
+        "To reduce curriculum content"
+      ],
+      "diff": "easy",
+      "ans": 2
+    },
+    {
+      "id": 86,
+      "q": "What is the role of the National Council of Educational Research and Training (NCERT) in developing textbooks?",
+      "opts": [
+        "To develop high-quality textbooks",
+        "To conduct research in education",
+        "To train teachers",
+        "To promote Indian Knowledge Systems (IKS)"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 87,
+      "q": "What is the significance of the textbook Ganita Prakash in the context of mathematics education?",
+      "opts": [
+        "It makes learning fun and engaging",
+        "It focuses on advanced mathematical concepts",
+        "It prepares students for competitive exams",
+        "It develops critical thinking skills"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 88,
+      "q": "What is the main goal of the Chapter 1: A Square and A Cube in terms of student learning?",
+      "opts": [
+        "To introduce special types of numbers",
+        "To discuss quadrilaterals",
+        "To explore number play",
+        "To reveal the story of numbers"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 89,
+      "q": "What is the significance of the Chapter 2: Power Play in terms of mathematical concepts?",
+      "opts": [
+        "It discusses short and logical ways of expressing very large numbers",
+        "It introduces squares and cubes",
+        "It explores number play",
+        "It reveals the story of numbers"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 90,
+      "q": "What is the main focus of the Chapter 3: A Story of Numbers in terms of mathematical concepts?",
+      "opts": [
+        "To reveal how the idea of number and number representation evolved over time",
+        "To discuss quadrilaterals",
+        "To explore number play",
+        "To introduce squares and cubes"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 91,
+      "q": "What is the significance of the Chapter 4: Quadrilaterals in terms of mathematical concepts?",
+      "opts": [
+        "It discusses interesting types of four-sided figures and problems based on them",
+        "It introduces squares and cubes",
+        "It explores number play",
+        "It reveals the story of numbers"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 92,
+      "q": "What is the main goal of the Chapter 5: Number Play in terms of student learning?",
+      "opts": [
+        "To show different properties of numbers",
+        "To discuss quadrilaterals",
+        "To introduce squares and cubes",
+        "To reveal the story of numbers"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 93,
+      "q": "What is the role of school libraries in supporting student learning?",
+      "opts": [
+        "To provide resources for students to explore",
+        "To develop the textbook content",
+        "To train teachers",
+        "To promote Indian Knowledge Systems (IKS)"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 94,
+      "q": "What is the significance of the National Curriculum Framework for School Education (NCF-SE) 2023 in terms of student development?",
+      "opts": [
+        "It aims to equip students with skills needed to grow",
+        "It focuses on advanced mathematical concepts",
+        "It prepares students for competitive exams",
+        "It develops critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 95,
+      "q": "What is the main focus of the textbook in terms of learning mathematics?",
+      "opts": [
+        "To make learning fun and engaging",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "easy",
+      "ans": 0
+    },
+    {
+      "id": 96,
+      "q": "What is the role of the teacher in the classroom according to the textbook?",
+      "opts": [
+        "To provide direct instruction",
+        "To facilitate student-student and student-teacher interaction",
+        "To focus on individual learning",
+        "To develop artistic and creative skills"
+      ],
+      "diff": "medium",
+      "ans": 1
+    },
+    {
+      "id": 97,
+      "q": "What is the significance of open-ended questions in the textbook?",
+      "opts": [
+        "To stimulate classroom discussion",
+        "To focus on individual learning",
+        "To develop critical thinking skills",
+        "To prepare students for competitive exams"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 98,
+      "q": "What is the main goal of the textbook in terms of student development?",
+      "opts": [
+        "To develop intuition and rigour",
+        "To focus on advanced mathematical concepts",
+        "To prepare students for competitive exams",
+        "To develop critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 99,
+      "q": "What is the role of mathematics in understanding concepts in other school subjects?",
+      "opts": [
+        "It plays a crucial role",
+        "It is not essential",
+        "It is only useful for science and social science",
+        "It is not relevant"
+      ],
+      "diff": "medium",
+      "ans": 0
+    },
+    {
+      "id": 100,
+      "q": "What is the significance of the Middle Stage in the educational journey of a student?",
+      "opts": [
+        "It is a critical three-year bridge between the Preparatory and Secondary Stages",
+        "It is a preparatory stage for the secondary stage",
+        "It is a stage that focuses on advanced mathematical concepts",
+        "It is a stage that develops critical thinking skills"
+      ],
+      "diff": "medium",
+      "ans": 0
+    }
+  ]
+}

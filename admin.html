@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMAPrep Pro – Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<script>
+(function () {
+  document.documentElement.style.visibility = 'hidden';
+  var raw;
+  try { raw = sessionStorage.getItem('cmaUser'); } catch (_) {}
+  if (!raw) { window.location.replace('index.html#login'); return; }
+  var user;
+  try { user = JSON.parse(raw); } catch (_) { window.location.replace('index.html#login'); return; }
+  if (user.role !== 'admin') { window.location.replace('dashboard.html'); return; }
+  document.documentElement.style.visibility = '';
+})();
+</script>
+
+</head>
+<body>
+
+<!-- ── Toast ───────────────────────────────────────────────── -->
+<div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toastMsg"></span></div>
+
+<!-- ── Sidebar Overlay (mobile) ────────────────────────────── -->
+<div class="a-sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- ── Sidebar ─────────────────────────────────────────────── -->
+<aside class="a-sidebar" id="aSidebar">
+  <a class="a-brand" href="index.html">
+    <div class="a-brand-icon">A</div>
+    <span class="a-brand-name">CMA<span>Prep</span></span>
+  </a>
+
+  <nav class="a-nav">
+    <div class="a-nav-section">Overview</div>
+    <a class="a-nav-item active" onclick="navTo('view-dashboard', this)">
+      <span class="a-nav-icon">⊞</span> Dashboard
+    </a>
+
+    <div class="a-nav-section">Tests</div>
+    <a class="a-nav-item" onclick="navTo('view-manage-tests', this)">
+      <span class="a-nav-icon">📋</span> Manage Tests
+    </a>
+    <a class="a-nav-item" onclick="navTo('view-create-test', this)">
+      <span class="a-nav-icon">＋</span> Create Test
+    </a>
+
+    <div class="a-nav-section">Students</div>
+    <a class="a-nav-item" onclick="navTo('view-students', this)">
+      <span class="a-nav-icon">👥</span> Registered Students
+    </a>
+    <a class="a-nav-item" onclick="navTo('view-analytics', this)">
+      <span class="a-nav-icon">📊</span> Analytics
+    </a>
+    <a class="a-nav-item" onclick="navTo('view-unlock', this)">
+      <span class="a-nav-icon">🔓</span> L2 Unlock Requests
+      <span class="a-nav-badge amber" id="nav-badge-pending">47</span>
+    </a>
+
+    <div class="a-nav-section">Administration</div>
+    <a class="a-nav-item" onclick="navTo('view-leaderboard', this)">
+      <span class="a-nav-icon">🏆</span> Leaderboard
+    </a>
+    <a class="a-nav-item" onclick="navTo('view-level2-config', this)">
+      <span class="a-nav-icon">🎯</span> Level 2 Schedule
+    </a>
+
+    <a class="a-nav-item" onclick="navTo('view-past-papers', this)">
+      <span class="a-nav-icon">📁</span> Past Papers
+    </a>
+  </nav>
+
+  <div class="a-sidebar-footer">
+    <div class="a-user-pill">
+      <div class="a-avatar" id="sidebar-initials">A</div>
+      <div class="a-user-info">
+        <div class="a-user-name" id="sidebar-name">Admin</div>
+        <div class="a-user-role">Administrator</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ── Main ────────────────────────────────────────────────── -->
+<div class="a-main">
+
+  <!-- Topbar -->
+  <header class="a-topbar">
+    <button class="a-hamburger" onclick="toggleSidebar()" aria-label="Open menu">☰</button>
+    <div class="a-breadcrumb">
+      Admin <span style="color:var(--text-muted)">›</span> <span id="breadcrumb-page">Dashboard</span>
+    </div>
+    <div class="a-topbar-right">
+      <div class="a-topbar-id">
+        <div class="a-avatar" style="width:26px;height:26px;font-size:11px" id="admin-user-info-small">A</div>
+        <span id="nav-user-name" style="font-size:13px;font-weight:600"></span>
+      </div>
+      <button class="a-topbar-btn" onclick="window.location.href='index.html'">← Public Site</button>
+      <button class="a-topbar-btn danger" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="a-content">
+
+    <!-- ══ VIEW: Dashboard ════════════════════════════════════ -->
+    <div class="a-view" id="view-dashboard">
+      <div class="a-page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div>
+          <div class="a-page-title">Admin Panel</div>
+          <div class="a-page-sub">Manage tests, students, and platform settings.</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+          <span class="a-refresh-badge" id="refresh-badge-dashboard">–</span>
+          <button class="a-btn a-btn-outline a-btn-sm" onclick="refreshNow('dashboard')">↺ Refresh</button>
+        </div>
+      </div>
+
+      <div class="a-stats-grid">
+        <div class="a-stat">
+          <div class="a-stat-label">Registered Students</div>
+          <div class="a-stat-value" id="admin-stat-students">⏳</div>
+          <div class="a-stat-change">Total sign-ups</div>
+        </div>
+        <div class="a-stat">
+          <div class="a-stat-label">Active Tests</div>
+          <div class="a-stat-value" id="admin-stat-tests">⏳</div>
+          <div class="a-stat-change">Live right now</div>
+        </div>
+        <div class="a-stat">
+          <div class="a-stat-label">Pending L2 Approvals</div>
+          <div class="a-stat-value" id="admin-stat-pending">⏳</div>
+          <div class="a-stat-change">Awaiting review</div>
+        </div>
+        <div class="a-stat">
+          <div class="a-stat-label">Tests Submitted</div>
+          <div class="a-stat-value" id="admin-stat-submissions">⏳</div>
+          <div class="a-stat-change">All time</div>
+        </div>
+      </div>
+
+      <!-- Backend Info (shown on dashboard) -->
+      <div class="a-info-block">
+        <div class="a-info-block-title">🏗️ Backend Architecture</div>
+        <div class="a-info-grid">
+          <div class="a-info-tile">
+            <div class="a-info-tile-title">📊 Google Sheets (DB)</div>
+            <div class="a-info-tile-body">
+              Sheet 1: Student Registrations<br>
+              Sheet 2: Test Submissions + Scores<br>
+              Sheet 3: MCQ Questions Bank<br>
+              Sheet 4: Leaderboard Data
+            </div>
+          </div>
+          <div class="a-info-tile">
+            <div class="a-info-tile-title">⚙️ Apps Script APIs</div>
+            <div class="a-info-tile-body">
+              POST /registerStudent<br>
+              POST /submitTest<br>
+              GET /getQuestions<br>
+              POST /unlockLevel2
+            </div>
+          </div>
+          <div class="a-info-tile">
+            <div class="a-info-tile-title">🔐 Auth</div>
+            <div class="a-info-tile-body">
+              Firebase Auth / Supabase Auth<br>
+              JWT token-based session<br>
+              Role: student | admin
+            </div>
+          </div>
+          <div class="a-info-tile">
+            <div class="a-info-tile-title">📬 Notifications</div>
+            <div class="a-info-tile-body">
+              Email via SendGrid / Gmail API<br>
+              Admit card PDF generation<br>
+              Result announcement triggers
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: Manage Tests ══════════════════════════════════ -->
+    <div class="a-view" id="view-manage-tests" style="display:none">
+      <div class="a-page-header">
+        <div class="a-page-title">Manage Tests</div>
+        <div class="a-page-sub">View, edit, and control all tests on the platform.</div>
+      </div>
+      <div class="a-card" id="section-manage-tests">
+        <div class="a-card-header">
+          <div class="a-card-title">All Tests</div>
+          <div class="a-card-actions">
+            <div class="a-tabs">
+              <button class="a-tab active" onclick="filterTests('all', this)">All</button>
+              <button class="a-tab" onclick="filterTests('live', this)">Live</button>
+              <button class="a-tab" onclick="filterTests('upcoming', this)">Upcoming</button>
+              <button class="a-tab" onclick="filterTests('draft', this)">Draft</button>
+              <button class="a-tab" onclick="filterTests('expired', this)">Expired</button>
+            </div>
+            <span class="a-refresh-badge" id="refresh-badge-manage-tests">–</span>
+            <button class="a-btn a-btn-outline a-btn-sm" onclick="refreshNow('manage-tests')">↺ Refresh</button>
+          </div>
+        </div>
+        <div class="a-card-body" style="padding:0">
+          <div id="manageTestsBody" style="padding:16px;display:flex;flex-direction:column;gap:16px">
+            <div style="text-align:center;padding:32px;color:var(--text-muted)">Loading tests…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: Create Test ═══════════════════════════════════ -->
+    <div class="a-view" id="view-create-test" style="display:none">
+      <div class="a-page-header">
+        <div class="a-page-title">Create New Test</div>
+        <div class="a-page-sub">Configure and publish a new test for students.</div>
+      </div>
+      <div class="a-card" id="section-create-test">
+        <div class="a-card-header">
+          <div class="a-card-title">Test Details</div>
+        </div>
+        <div class="a-card-body">
+          <div class="a-form-grid a-form-grid-3" style="margin-bottom:14px">
+            <div class="a-form-group">
+              <label class="a-label">Level</label>
+              <select class="a-select" id="create-level">
+                <option>Foundation</option>
+                <option selected>Intermediate</option>
+                <option>Final</option>
+              </select>
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">Subject</label>
+              <input class="a-input" type="text" id="create-subject" placeholder="e.g. Cost Accounting">
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">Chapter(s) / Title</label>
+              <input class="a-input" type="text" id="create-chapter" placeholder="e.g. Chapter 5–7">
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">Duration (mins)</label>
+              <input class="a-input" type="number" id="create-duration" value="60">
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">Test Type</label>
+              <select class="a-select" id="create-pricing-type">
+                <option value="Free">Free</option>
+                <option value="Paid">Paid</option>
+              </select>
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">Price (₹)</label>
+              <input class="a-input" type="number" id="create-price" value="0">
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">Status</label>
+              <select class="a-select" id="create-status">
+                <option value="draft">Draft</option>
+                <option value="live">Live</option>
+                <option value="expired">Expired</option>
+              </select>
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">Start Time</label>
+              <input class="a-input" type="datetime-local" id="create-start-time">
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">End Time</label>
+              <input class="a-input" type="datetime-local" id="create-end-time">
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">Negative Marking</label>
+              <select class="a-select" id="create-negative-mark">
+                <option value="0">None (0 marks)</option>
+                <option value="0.25">−0.25 marks</option>
+                <option value="0.5">−0.50 marks</option>
+                <option value="1">−1.00 marks</option>
+              </select>
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">1st Prize (₹)</label>
+              <input class="a-input" type="number" id="create-prize-1" value="0">
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">2nd Prize (₹)</label>
+              <input class="a-input" type="number" id="create-prize-2" value="0">
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">3rd Prize (₹)</label>
+              <input class="a-input" type="number" id="create-prize-3" value="0">
+            </div>
+          </div>
+          <div class="a-form-group" style="margin-bottom:14px">
+            <label class="a-label">Description / Syllabus</label>
+            <textarea class="a-input" id="create-description" rows="3" placeholder="Enter test description or syllabus..."></textarea>
+          </div>
+
+          <!-- JSON Upload -->
+          <div style="border-top:1px solid var(--card-border);padding-top:18px;margin-top:4px">
+            <div style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:10px">Upload JSON Test File (Optional)</div>
+            <div class="a-dropzone" id="jsonDropZone"
+                 onclick="document.getElementById('jsonFileInput').click()"
+                 ondragover="event.preventDefault();this.style.borderColor='#6b8fff'"
+                 ondragleave="this.style.borderColor='var(--card-border)'"
+                 ondrop="handleJsonDrop(event)">
+              <div class="a-dropzone-icon">🗂️</div>
+              <div class="a-dropzone-text">Click or drag & drop a JSON test file</div>
+              <div class="a-dropzone-hint">.json only · Max 5 MB</div>
+              <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="handleJsonFile(this)">
+            </div>
+            <div class="a-file-preview" id="jsonFilePreview">
+              <span style="font-size:18px">✅</span>
+              <div style="flex:1">
+                <div id="jsonFileName" style="font-size:13px;font-weight:700;color:var(--green-text)"></div>
+                <div id="jsonFileSize" style="font-size:12px;color:var(--text-muted)"></div>
+              </div>
+              <button class="a-link-btn del a-btn-sm" onclick="clearJsonFile(event)">✕ Remove</button>
+            </div>
+          </div>
+
+          <div style="margin-top:18px;display:flex;gap:8px">
+            <button class="a-btn a-btn-primary" id="create-test-btn" onclick="handleUnifiedTestCreate()">Create Test</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: Registered Students ══════════════════════════ -->
+    <div class="a-view" id="view-students" style="display:none">
+      <div class="a-page-header">
+        <div class="a-page-title">Registered Students</div>
+        <div class="a-page-sub">All students who have signed up on the platform.</div>
+      </div>
+      <div class="a-card" id="section-students">
+        <div class="a-card-header">
+          <div class="a-card-title">Student Directory</div>
+          <div class="a-card-actions">
+            <span class="a-refresh-badge" id="refresh-badge-students">–</span>
+            <button class="a-btn a-btn-outline a-btn-sm" onclick="refreshNow('students')">↺ Refresh</button>
+          </div>
+        </div>
+        <div class="a-table-wrap">
+          <table class="a-table">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Phone</th>
+                <th>Level</th>
+                <th>Joined</th>
+              </tr>
+            </thead>
+            <tbody id="adminStudentsBody">
+              <tr><td colspan="4" style="text-align:center;padding:24px;color:var(--text-muted)">Loading students…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: Analytics ════════════════════════════════════ -->
+    <div class="a-view" id="view-analytics" style="display:none">
+      <div class="a-page-header">
+        <div class="a-page-title">Analytics</div>
+        <div class="a-page-sub">Student performance, scores, and violation reports.</div>
+      </div>
+      <div class="a-card" id="section-analytics">
+        <div class="a-card-header">
+          <div class="a-card-title">Student Analytics & Violations</div>
+          <div class="a-card-actions">
+            <span class="a-refresh-badge" id="refresh-badge-analytics">–</span>
+            <button class="a-btn a-btn-outline a-btn-sm" onclick="refreshNow('analytics')">↺ Refresh Data</button>
+          </div>
+        </div>
+        <div class="a-table-wrap">
+          <table class="a-table">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Test</th>
+                <th>Score</th>
+                <th>Submission</th>
+                <th>Violations</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="adminAnalyticsBody">
+              <tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted)">Click Refresh to load analytics</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: L2 Unlock Requests ═══════════════════════════ -->
+    <div class="a-view" id="view-unlock" style="display:none">
+      <div class="a-page-header">
+        <div class="a-page-title">L2 Unlock Requests</div>
+        <div class="a-page-sub">Review and approve student Level 2 access requests.</div>
+      </div>
+      <div class="a-card" id="section-unlock">
+        <div class="a-card-header">
+          <div class="a-card-title">Level 2 Unlock Requests</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="a-refresh-badge" id="refresh-badge-unlock">–</span>
+            <button class="a-btn a-btn-outline a-btn-sm" onclick="refreshNow('unlock')">↺ Refresh</button>
+            <span class="a-badge a-badge-pending" id="unlock-pending-badge">– Pending</span>
+          </div>
+        </div>
+        <div class="a-table-wrap">
+          <table class="a-table">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Test</th>
+                <th>L1 Score</th>
+                <th>Request Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="level2UnlockBody">
+              <tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted)">Loading requests…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: Leaderboard ══════════════════════════════════ -->
+    <div class="a-view" id="view-leaderboard" style="display:none">
+      <div class="a-page-header">
+        <div class="a-page-title">Leaderboard</div>
+        <div class="a-page-sub">Rankings, points, and contest management.</div>
+      </div>
+      <div class="a-card" id="section-leaderboard">
+        <div class="a-card-header">
+          <div class="a-card-title">Leaderboard Management</div>
+          <div class="a-card-actions">
+            <span class="a-refresh-badge" id="refresh-badge-leaderboard">–</span>
+            <button class="a-btn a-btn-outline a-btn-sm" onclick="refreshNow('leaderboard')">↺ Refresh</button>
+            <button class="a-btn a-btn-outline a-btn-sm" id="toggle-lb-visibility" onclick="toggleLeaderboardVisibility()">👁️ Hide LB</button>
+            <button class="a-btn a-btn-danger a-btn-sm" onclick="resetLeaderboard()">Reset Rankings</button>
+            <button class="a-btn a-btn-gold a-btn-sm" onclick="declareWinners()">Declare Winners</button>
+          </div>
+        </div>
+        <div class="a-table-wrap">
+          <table class="a-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Student</th>
+                <th>Tests Done</th>
+                <th>Avg Score</th>
+                <th>Points</th>
+                <th>Rewards</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminLeaderboardBody">
+              <tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted)">Click Refresh to load…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VIEW: Level 2 Schedule ═════════════════════════════ -->
+    <div class="a-view" id="view-level2-config" style="display:none">
+      <div class="a-page-header">
+        <div class="a-page-title">Level 2 Schedule</div>
+        <div class="a-page-sub">Set the date, time, and meet link for the Level 2 test.</div>
+      </div>
+      <div class="a-card" id="section-level2-config">
+        <div class="a-card-header">
+          <div class="a-card-title">Level 2 Test Scheduling</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="a-refresh-badge" id="refresh-badge-level2-config">–</span>
+            <button class="a-btn a-btn-outline a-btn-sm" onclick="refreshNow('level2-config')">↺ Refresh</button>
+          </div>
+        </div>
+        <div class="a-card-body">
+          <div class="a-form-grid a-form-grid-2" style="margin-bottom:16px">
+            <div class="a-form-group">
+              <label class="a-label">Level 2 Date</label>
+              <input class="a-input" type="date" id="l2-date">
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">Level 2 Time</label>
+              <input class="a-input" type="time" id="l2-time">
+            </div>
+            <div class="a-form-group full">
+              <label class="a-label">Google Meet Link</label>
+              <input class="a-input" type="url" id="l2-meet" placeholder="https://meet.google.com/xyz">
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">Status</label>
+              <select class="a-select" id="l2-status">
+                <option value="Draft">Draft</option>
+                <option value="Upcoming">Upcoming</option>
+                <option value="Live">Live</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+          </div>
+          <button class="a-btn a-btn-primary" onclick="saveLevel2Config()">Save Configuration</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ VIEW: Past Papers ══════════════════════════════════ -->
+    <div class="a-view" id="view-past-papers" style="display:none">
+      <div class="a-page-header">
+        <div class="a-page-title">Past Papers</div>
+        <div class="a-page-sub">Upload and publish previous year exam papers.</div>
+      </div>
+      <div class="a-card" id="section-past-papers">
+        <div class="a-card-header">
+          <div class="a-card-title">Upload Previous Year Papers</div>
+        </div>
+        <div class="a-card-body">
+          <div class="a-form-grid a-form-grid-3" style="margin-bottom:16px">
+            <div class="a-form-group">
+              <label class="a-label">Level</label>
+              <select class="a-select">
+                <option>Foundation</option>
+                <option>Intermediate</option>
+                <option>Final</option>
+              </select>
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">Exam Session</label>
+              <select class="a-select">
+                <option>June 2024</option>
+                <option>December 2023</option>
+                <option>June 2023</option>
+                <option>December 2022</option>
+              </select>
+            </div>
+            <div class="a-form-group">
+              <label class="a-label">Paper Type</label>
+              <select class="a-select">
+                <option>Question Paper</option>
+                <option>Answer Key</option>
+                <option>Suggested Answers</option>
+              </select>
+            </div>
+          </div>
+          <div class="a-dropzone" onclick="showToast('File picker opened – PDF upload placeholder')">
+            <div class="a-dropzone-icon">📄</div>
+            <div class="a-dropzone-text">Click to upload PDF paper</div>
+            <div class="a-dropzone-hint">PDF only · Max 20 MB · Will be public on homepage</div>
+          </div>
+          <div style="margin-top:14px;display:flex;gap:8px">
+            <button class="a-btn a-btn-primary" onclick="showToast('Paper uploaded and published!')">Upload & Publish</button>
+            <button class="a-btn a-btn-outline" onclick="showToast('Saved as draft')">Save Draft</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── Inline Scripts ──────────────────────────────────────── -->
+<script>
+let _selectedFileForUpload = null;
+let _currentFilter = 'all';
+let _allTests = [];
+
+// Avatar colors
+function avColor(name) {
+  const colors = ['av-0','av-1','av-2','av-3','av-4','av-5'];
+  let h = 0; for (let c of (name||'')) h = (h*31 + c.charCodeAt(0)) % colors.length;
+  return colors[h];
+}
+
+function initials(name) {
+  return (name||'?').trim().split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
+}
+
+// ── Sidebar toggle (mobile) ─────────────────────────────────
+function toggleSidebar() {
+  document.getElementById('aSidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('aSidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+
+// Close sidebar on nav tap (mobile)
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.a-nav-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      if (window.innerWidth <= 768) closeSidebar();
+    });
+  });
+});
+
+// ── Mobile data-label injection ─────────────────────────────
+(function() {
+  const TABLE_LABELS = {
+    manageTestsBody:      ['Test', 'Status', 'Start Time', 'End Time', 'Actions'],
+    adminStudentsBody:    ['Student', 'Phone', 'Level', 'Joined'],
+    adminAnalyticsBody:   ['Student', 'Test', 'Score', 'Submission', 'Violations', 'Timestamp'],
+    level2UnlockBody:     ['Student', 'Test', 'L1 Score', 'Request Date', 'Status', 'Action'],
+    adminLeaderboardBody: ['Rank', 'Student', 'Tests Done', 'Avg Score', 'Points', 'Rewards'],
+  };
+
+  function labelRows(tbodyId) {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    const labels = TABLE_LABELS[tbodyId];
+    tbody.querySelectorAll('tr').forEach(function(tr) {
+      tr.querySelectorAll('td').forEach(function(td, i) {
+        if (!td.getAttribute('colspan') && labels[i]) {
+          td.setAttribute('data-label', labels[i]);
+        }
+      });
+    });
+  }
+
+  function observeTable(tbodyId) {
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
+    labelRows(tbodyId);
+    new MutationObserver(function() { labelRows(tbodyId); })
+      .observe(tbody, { childList: true, subtree: true });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    Object.keys(TABLE_LABELS).forEach(observeTable);
+  });
+})();
+
+// ── Navigation ─────────────────────────────────────────────
+const PAGE_LABELS = {
+  'view-dashboard':      'Dashboard',
+  'view-manage-tests':   'Manage Tests',
+  'view-create-test':    'Create Test',
+  'view-students':       'Registered Students',
+  'view-analytics':      'Analytics',
+  'view-unlock':         'L2 Unlock Requests',
+  'view-leaderboard':    'Leaderboard',
+  'view-level2-config':  'Level 2 Schedule',
+
+  'view-past-papers':    'Past Papers',
+};
+
+function navTo(viewId, clickedEl) {
+  // Update sidebar active state
+  document.querySelectorAll('.a-nav-item').forEach(el => el.classList.remove('active'));
+  if (clickedEl) clickedEl.classList.add('active');
+
+  // Hide all views
+  document.querySelectorAll('.a-view').forEach(v => v.style.display = 'none');
+
+  // Show target view
+  const target = document.getElementById(viewId);
+  if (target) target.style.display = 'block';
+
+  // Scroll to top
+  const mainEl = document.querySelector('.a-content');
+  if (mainEl) mainEl.scrollTop = 0;
+  window.scrollTo(0, 0);
+
+  // Update breadcrumb
+  const crumb = document.getElementById('breadcrumb-page');
+  if (crumb) crumb.textContent = PAGE_LABELS[viewId] || 'Dashboard';
+
+  // Lazy-load section data on first visit (manual refresh button for subsequent loads)
+  const section = VIEW_TO_SECTION[viewId];
+  if (section) loadSectionOnce(section);
+}
+
+// ── Status badge ───────────────────────────────────────────
+function statusBadge(s) {
+  const map = {
+    live:'a-badge-live', draft:'a-badge-draft', expired:'a-badge-expired',
+    active:'a-badge-active', inactive:'a-badge-inactive',
+    pending:'a-badge-pending', free:'a-badge-free', paid:'a-badge-paid'
+  };
+  return `<span class="a-badge ${map[s]||'a-badge-draft'}">${s||'draft'}</span>`;
+}
+
+// ── Filter Tests ────────────────────────────────────────────
+function filterTests(filter, btn) {
+  _currentFilter = filter;
+  document.querySelectorAll('.a-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderManageTests();
+}
+
+function renderManageTests() {
+  const container = document.getElementById('manageTestsBody');
+  const tests = _currentFilter === 'all' ? _allTests : _allTests.filter(t => t.status === _currentFilter);
+  if (!tests.length) {
+    container.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">No tests found.</div>';
+    return;
+  }
+  container.innerHTML = tests.map(t => `
+    <div style="border:1px solid var(--card-border);border-radius:10px;padding:20px;background:var(--card-bg)">
+      <!-- Header row: title + ID badge + status badge -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px">
+        <div style="flex:1">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:4px">TITLE</div>
+          <input type="text" class="a-input" style="font-weight:600;font-size:14px;width:100%" id="title_${t.testId}" value="${escHtml(t.title)}">
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+          <span style="font-size:11px;font-weight:600;color:var(--text-muted);font-family:var(--mono)">${escHtml(t.testId)}</span>
+          ${statusBadge(t.status)}
+        </div>
+      </div>
+
+      <!-- Form grid -->
+      <div class="a-form-grid a-form-grid-3" style="margin-bottom:14px">
+        <div class="a-form-group">
+          <label class="a-label">Level</label>
+          <select class="a-select" id="level_${t.testId}">
+            <option value="foundation" ${(t.level||'').toLowerCase()==='foundation'?'selected':''}>Foundation</option>
+            <option value="intermediate" ${(t.level||'').toLowerCase()==='intermediate'?'selected':''}>Intermediate</option>
+            <option value="final" ${(t.level||'').toLowerCase()==='final'?'selected':''}>Final</option>
+          </select>
+        </div>
+        <div class="a-form-group">
+          <label class="a-label">Status</label>
+          <select class="a-select" id="status_${t.testId}">
+            <option value="draft" ${t.status==='draft'?'selected':''}>Draft</option>
+            <option value="upcoming" ${t.status==='upcoming'?'selected':''}>Upcoming</option>
+            <option value="live" ${t.status==='live'?'selected':''}>Live</option>
+            <option value="expired" ${t.status==='expired'?'selected':''}>Expired</option>
+          </select>
+        </div>
+        <div class="a-form-group">
+          <label class="a-label">Total Questions</label>
+          <input class="a-input" type="text" value="${t.totalQuestions||'—'}" disabled style="color:var(--text-muted)">
+        </div>
+        <div class="a-form-group">
+          <label class="a-label">Start Time</label>
+          <input type="datetime-local" class="a-input" id="start_${t.testId}" value="${t.startTime||''}">
+        </div>
+        <div class="a-form-group">
+          <label class="a-label">End Time</label>
+          <input type="datetime-local" class="a-input" id="end_${t.testId}" value="${t.endTime||''}">
+        </div>
+        <div class="a-form-group">
+          <label class="a-label">Duration (mins)</label>
+          <input class="a-input" type="text" value="${t.duration||'—'}" disabled style="color:var(--text-muted)">
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:10px;border-top:1px solid var(--card-border)">
+        <button class="a-btn a-btn-outline a-btn-sm" onclick="viewTestContent('${t.testId}')">View Content</button>
+        <button class="a-btn a-btn-sm" style="background:#FEF2F2;color:#DC2626;border:1px solid #FECACA" onclick="deleteTest('${t.testId}','${escHtml(t.title).replace(/'/g,"\\'")}')">🗑 Delete</button>
+        <button class="a-btn a-btn-primary a-btn-sm" onclick="saveTestDetails('${t.testId}')">Save Changes</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Load Manage Tests ───────────────────────────────────────
+async function loadManageTests() {
+  const container = document.getElementById('manageTestsBody');
+  container.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Loading\u2026</div>';
+  try {
+    const data = await apiCall('fetchTests');
+    if (data.status === 'success' && data.data?.tests) {
+      _allTests = data.data.tests;
+      renderManageTests();
+    } else {
+      _allTests = [];
+      renderManageTests();
+    }
+  } catch(e) {
+    container.innerHTML = '<div style="text-align:center;padding:32px;color:var(--red-text)">Failed to load tests.</div>';
+  }
+}
+
+window.viewTestContent = function(testId) {
+  const modal = document.getElementById('contentViewerModal');
+  const body  = document.getElementById('contentViewerBody');
+  const title = document.getElementById('contentViewerTitle');
+  body.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-muted)">Loading questions…</div>';
+  title.textContent = 'Loading…';
+  modal.classList.add('open');
+  apiCall('fetchTests').then(res => {
+    const test = (res.data?.tests || []).find(t => t.testId === testId);
+    if (!test) { body.innerHTML = '<div style="padding:24px;color:var(--red-text)">Test not found.</div>'; return; }
+    title.textContent = test.title || testId;
+    const qs = test.testData?.questions || [];
+    if (!qs.length) { body.innerHTML = '<div style="padding:24px;color:var(--text-muted)">No questions found for this test.</div>'; return; }
+    body.innerHTML = qs.map((q, i) => `
+      <div style="padding:14px 0;border-bottom:1px solid var(--card-border)">
+        <div style="font-weight:600;font-size:13.5px;margin-bottom:8px;color:var(--text-main)">${i+1}. ${escHtml(q.q)}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          ${(q.opts||[]).map((opt, idx) => `
+            <div style="padding:6px 10px;border-radius:6px;font-size:12.5px;
+              background:${idx===q.ans?'#ECFDF5':'var(--bg)'};
+              color:${idx===q.ans?'#059669':'var(--text-muted)'};
+              border:1px solid ${idx===q.ans?'#6EE7B7':'var(--card-border)'}">
+              ${idx===q.ans?'✓ ':''}${escHtml(opt)}
+            </div>`).join('')}
+        </div>
+      </div>`).join('');
+  }).catch(() => { body.innerHTML = '<div style="padding:24px;color:var(--red-text)">Failed to load content.</div>'; });
+};
+
+window.deleteTest = async function(testId, testTitle) {
+  if (!confirm(`Delete "${testTitle}"?\n\nThis cannot be undone.`)) return;
+  try {
+    const res = await apiCall('deleteTest', { testId });
+    if (res.status === 'success') {
+      showToast('🗑 Test deleted');
+      _allTests = _allTests.filter(t => t.testId !== testId);
+      renderManageTests();
+    } else {
+      showToast('❌ Failed: ' + res.message);
+    }
+  } catch(e) { showToast('❌ Network error deleting test'); }
+};
+
+window.saveTestDetails = async function(testId) {
+  const title = document.getElementById('title_' + testId)?.value;
+  const level = document.getElementById('level_' + testId)?.value;
+  const status = document.getElementById('status_' + testId).value;
+  const startTime = document.getElementById('start_' + testId).value;
+  const endTime = document.getElementById('end_' + testId).value;
+  try {
+    const res = await apiCall('updateTest', { testId, title, level, status, startTime, endTime });
+    if (res.status === 'success') {
+      showToast('✅ Test updated successfully');
+      // Trigger student notification when test goes live
+      if (status === 'live') {
+        apiCall('notifyStudents', { testId, trigger: 'testLive' }).catch(() => {});
+      }
+      loadManageTests();
+    }
+    else showToast('❌ Failed: ' + res.message);
+  } catch(e) { showToast('❌ Network error saving test'); }
+};
+
+// ── Load Students ───────────────────────────────────────────
+async function loadAdminStudents() {
+  const tbody = document.getElementById('adminStudentsBody');
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--text-muted)">Loading…</td></tr>';
+  try {
+    const data = await apiCall('getStudents');
+    if (data.status === 'success' && data.data?.students?.length) {
+      tbody.innerHTML = data.data.students.map(st => {
+        const av = avColor(st.name);
+        return `<tr>
+          <td>
+            <div class="a-user-cell">
+              <div class="a-cell-avatar ${av}">${initials(st.name)}</div>
+              <div>
+                <div class="a-cell-name">${escHtml(st.name)}</div>
+                <div class="a-cell-sub">${escHtml(st.email)}</div>
+              </div>
+            </div>
+          </td>
+          <td style="color:var(--text-secondary)">${escHtml(st.phone||'—')}</td>
+          <td>${escHtml(st.level||'—')}</td>
+          <td style="color:var(--text-muted);font-size:12.5px">${new Date(st.registrationDate).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</td>
+        </tr>`;
+      }).join('');
+    } else {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--text-muted)">No students found.</td></tr>';
+    }
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--red-text)">Failed to load students.</td></tr>';
+  }
+}
+
+// ── Dashboard Stats ─────────────────────────────────────────
+async function loadAdminDashboardStats() {
+  try {
+    const data = await apiCall('getDashboardStats');
+    if (data.status === 'success' && data.data?.stats) {
+      ['students','tests','pending','submissions'].forEach(k => {
+        const el = document.getElementById('admin-stat-' + k);
+        if (el) el.textContent = data.data.stats[k] ?? '—';
+      });
+    } else {
+      ['admin-stat-students','admin-stat-tests','admin-stat-pending','admin-stat-submissions']
+        .forEach(id => { const el = document.getElementById(id); if(el) el.textContent = '—'; });
+    }
+  } catch(e) {
+    ['admin-stat-students','admin-stat-tests','admin-stat-pending','admin-stat-submissions']
+      .forEach(id => { const el = document.getElementById(id); if(el) el.textContent = '⚠'; });
+  }
+}
+
+// ── Level 2 Requests ────────────────────────────────────────
+async function loadLevel2Requests() {
+  const tbody = document.getElementById('level2UnlockBody');
+  if (!tbody) return;
+  try {
+    const data = await apiCall('fetchAnalytics');
+    if (data.status === 'success' && data.data?.attempts) {
+      let attempts = data.data.attempts.filter(a => a.score !== null);
+      attempts.sort((a,b) => {
+        let sa = parseFloat((a.score||'0').split('(')[1]||a.score);
+        let sb = parseFloat((b.score||'0').split('(')[1]||b.score);
+        if (sb !== sa) return sb - sa;
+        return (parseInt(a.totalTime)||999999) - (parseInt(b.totalTime)||999999);
+      });
+      const top10 = attempts.slice(0,10);
+      // Update pending badge with real count
+      const badge = document.getElementById('unlock-pending-badge');
+      const navBadge = document.getElementById('nav-badge-pending');
+      if (badge) badge.textContent = attempts.length + ' Pending';
+      if (navBadge) { navBadge.textContent = attempts.length; navBadge.style.display = attempts.length ? '' : 'none'; }
+      if (!top10.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted)">No pending requests.</td></tr>'; return; }
+      tbody.innerHTML = top10.map(req => {
+        const av = avColor(req.name);
+        return `<tr>
+          <td>
+            <div class="a-user-cell">
+              <div class="a-cell-avatar ${av}">${initials(req.name)}</div>
+              <div class="a-cell-name">${escHtml(req.name)}</div>
+            </div>
+          </td>
+          <td>${escHtml(req.testTitle)}</td>
+          <td style="font-family:var(--mono);font-weight:600;color:var(--green-text)">${req.score}</td>
+          <td style="font-size:12.5px;color:var(--text-muted)">${new Date(req.timestamp).toLocaleDateString()}</td>
+          <td>${statusBadge('pending')}</td>
+          <td>
+            <div class="a-action">
+              <button class="a-link-btn ok" onclick="unlockLevel2('${req.email}','${req.name}')">Unlock</button>
+              <button class="a-link-btn del" onclick="rejectLevel2('${req.email}')">Reject</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--red-text)">Failed to load.</td></tr>';
+  }
+}
+
+window.unlockLevel2 = async function(email, name) {
+  try {
+    const res = await apiCall('unlockLevel2', { studentEmail: email });
+    if (res.status === 'success') { showToast('✅ Level 2 unlocked for ' + name); loadLevel2Requests(); }
+    else showToast('❌ Failed: ' + res.message);
+  } catch(e) { showToast('❌ Network error'); }
+};
+
+window.rejectLevel2 = async function(email) {
+  if (!confirm('Reject this unlock request?')) return;
+  try {
+    const res = await apiCall('rejectLevel2', { studentEmail: email });
+    if (res.status === 'success') { showToast('✅ Request rejected'); loadLevel2Requests(); }
+    else showToast('❌ Failed: ' + res.message);
+  } catch(e) { showToast('❌ Network error'); }
+};
+
+// ── Analytics ───────────────────────────────────────────────
+async function loadAdminAnalytics() {
+  const tbody = document.getElementById('adminAnalyticsBody');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted)">Loading…</td></tr>';
+  try {
+    const data = await apiCall('getAnalytics');
+    if (data.status === 'success' && data.data?.attempts?.length) {
+      tbody.innerHTML = data.data.attempts.map(att => {
+        const av = avColor(att.name);
+        const vBadge = att.violations > 0
+          ? `<span class="a-badge a-badge-expired">${att.violations} Violations</span>`
+          : `<span class="a-badge a-badge-active">Clean</span>`;
+        const typeLabel = att.type === 'violation submit'
+          ? `<span style="color:var(--red-text);font-weight:600">Forced</span>` : (att.type||'—');
+        return `<tr>
+          <td>
+            <div class="a-user-cell">
+              <div class="a-cell-avatar ${av}">${initials(att.name)}</div>
+              <div>
+                <div class="a-cell-name">${escHtml(att.name)}</div>
+                <div class="a-cell-sub">${escHtml(att.email)}</div>
+              </div>
+            </div>
+          </td>
+          <td>${escHtml(att.testTitle)}</td>
+          <td style="font-family:var(--mono);font-weight:700">${att.score}</td>
+          <td>${typeLabel}</td>
+          <td>${vBadge}</td>
+          <td style="font-size:12px;color:var(--text-muted)">${new Date(att.timestamp).toLocaleString()}</td>
+        </tr>`;
+      }).join('');
+    } else {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted)">No attempts recorded yet.</td></tr>';
+    }
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--red-text)">Failed to load analytics.</td></tr>';
+  }
+}
+
+// ── Leaderboard ─────────────────────────────────────────────
+async function loadAdminLeaderboard() {
+  const tbody = document.getElementById('adminLeaderboardBody');
+  tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted)">Loading…</td></tr>';
+  try {
+    const data = await apiCall('getLeaderboard');
+    const lbData = data.data?.leaderboard || data.leaderboard;
+    if (data.status === 'success' && lbData?.length) {
+      tbody.innerHTML = lbData.map((lb, i) => {
+        const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+        const av = avColor(lb.studentName);
+        return `<tr>
+          <td style="font-weight:700;font-size:15px">${medal||'#'+lb.currentRank}</td>
+          <td>
+            <div class="a-user-cell">
+              <div class="a-cell-avatar ${av}">${initials(lb.studentName)}</div>
+              <div>
+                <div class="a-cell-name">${escHtml(lb.studentName)}</div>
+                <div class="a-cell-sub">${escHtml(lb.email)}</div>
+              </div>
+            </div>
+          </td>
+          <td>${lb.testsAttempted}</td>
+          <td>${lb.avgScore}</td>
+          <td style="font-family:var(--mono);font-weight:700;color:var(--navy)">${lb.totalPoints}</td>
+          <td>${escHtml(lb.earnedRewards||'None')}</td>
+          <td>
+            <div class="a-action">
+              <button class="a-link-btn" onclick="updateLBRank('${lb.email}')">Rank</button>
+              <button class="a-link-btn" onclick="hideLBEntry('${lb.email}')">Hide</button>
+              <button class="a-link-btn del" onclick="deleteLBEntry('${lb.email}')">Del</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    } else {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted)">No leaderboard data.</td></tr>';
+    }
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--red-text)">Failed to load.</td></tr>';
+  }
+}
+
+window.updateLBRank = async function(email) {
+  const newRank = prompt('Enter new rank for ' + email + ':');
+  if(!newRank) return;
+  try {
+    const res = await apiCall('updateLBRank', { email, rank: newRank });
+    if(res.status==='success') { showToast('✅ Rank updated'); loadAdminLeaderboard(); }
+    else showToast('❌ ' + res.message);
+  } catch(e) { showToast('❌ Network error'); }
+};
+
+window.hideLBEntry = async function(email) {
+  if(!confirm('Hide ' + email + ' from public leaderboard?')) return;
+  try {
+    const res = await apiCall('hideLBEntry', { email });
+    if(res.status==='success') { showToast('✅ Hidden'); loadAdminLeaderboard(); }
+    else showToast('❌ ' + res.message);
+  } catch(e) { showToast('❌ Network error'); }
+};
+
+window.deleteLBEntry = async function(email) {
+  if(!confirm('Delete ' + email + ' from leaderboard?')) return;
+  try {
+    const res = await apiCall('deleteLBEntry', { email });
+    if(res.status==='success') { showToast('✅ Deleted'); loadAdminLeaderboard(); }
+    else showToast('❌ ' + res.message);
+  } catch(e) { showToast('❌ Network error'); }
+};
+
+let _lbIsVisible = true;
+window.toggleLeaderboardVisibility = async function() {
+  _lbIsVisible = !_lbIsVisible;
+  const btn = document.getElementById('toggle-lb-visibility');
+  try {
+    const res = await apiCall('toggleLeaderboardVisibility', { visible: _lbIsVisible });
+    if(res.status==='success') {
+      btn.innerHTML = _lbIsVisible ? '👁️ Hide LB' : '🚫 LB Hidden';
+      showToast('✅ Visibility updated');
+    } else showToast('❌ ' + res.message);
+  } catch(e) { showToast('❌ Network error'); }
+};
+
+async function resetLeaderboard() {
+  if (!confirm('Reset all rankings? This cannot be undone.')) return;
+  try {
+    const data = await apiCall('resetLeaderboard');
+    showToast(data.status === 'success' ? 'Leaderboard reset!' : '❌ Failed: ' + data.message);
+    if (data.status === 'success') loadAdminLeaderboard();
+  } catch(e) { showToast('❌ Network error.'); }
+}
+
+async function declareWinners() {
+  if (!confirm('Declare winners and send notifications?')) return;
+  try { await apiCall('declareWinners', {}); } catch(_) {}
+  showToast('🏆 Winners declared! Notifications dispatched.');
+}
+
+
+
+// ── Level 2 Config ──────────────────────────────────────────
+window.loadLevel2Status = async function() {
+  try {
+    const data = await apiCall('getLevel2Status');
+    if (data.status === 'success' && data.data?.level2) {
+      const l2 = data.data.level2;
+      if (l2.date) {
+        const d = new Date(l2.date);
+        if (!isNaN(d.getTime())) {
+          document.getElementById('l2-date').value = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        }
+      }
+      if (l2.time) {
+        let tv = l2.time;
+        if (tv.includes('T')) { const d=new Date(tv); tv=`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
+        document.getElementById('l2-time').value = tv;
+      }
+      if (l2.meetLink) document.getElementById('l2-meet').value = l2.meetLink;
+      if (l2.status) document.getElementById('l2-status').value = l2.status;
+    }
+  } catch(e) { console.error(e); }
+};
+
+window.saveLevel2Config = async function() {
+  const btn = document.querySelector('#section-level2-config .a-btn-primary');
+  if (!btn) return;
+  btn.disabled = true; btn.textContent = 'Saving…';
+  try {
+    const data = await apiCall('scheduleLevel2', {
+      level2Date: document.getElementById('l2-date').value,
+      level2Time: document.getElementById('l2-time').value,
+      meetLink: document.getElementById('l2-meet').value.trim(),
+      status: document.getElementById('l2-status').value
+    });
+    showToast(data.status === 'success' ? '✅ Config saved & notifications sent!' : '❌ Failed: ' + (data.message||'Error'));
+  } catch(e) { showToast('❌ Network error'); }
+  finally { btn.disabled = false; btn.textContent = 'Save Configuration'; }
+};
+
+// ── JSON File Upload ────────────────────────────────────────
+function handleJsonFile(input) {
+  const file = input.files[0];
+  if (file) showJsonPreview(file);
+}
+
+function handleJsonDrop(event) {
+  event.preventDefault();
+  document.getElementById('jsonDropZone').style.borderColor = 'var(--card-border)';
+  const file = event.dataTransfer.files[0];
+  if (!file) return;
+  if (!file.name.endsWith('.json')) { showToast('❌ Only .json files are allowed'); return; }
+  showJsonPreview(file);
+}
+
+function showJsonPreview(file) {
+  if (!file.name.endsWith('.json')) { showToast('❌ Only .json files allowed'); return; }
+  if (file.size > 5*1024*1024) { showToast('❌ File exceeds 5 MB'); return; }
+  document.getElementById('jsonFileName').textContent = file.name;
+  document.getElementById('jsonFileSize').textContent = (file.size/1024).toFixed(1) + ' KB';
+  const preview = document.getElementById('jsonFilePreview');
+  preview.style.display = 'flex';
+  _selectedFileForUpload = file;
+  const titleInput = document.getElementById('create-chapter');
+  if (!titleInput.value) titleInput.value = file.name.replace(/\.testseries\.json$|\.json$/,'').replace(/_/g,' ');
+}
+
+function clearJsonFile(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('jsonFileInput').value = '';
+  document.getElementById('jsonFilePreview').style.display = 'none';
+  _selectedFileForUpload = null;
+}
+
+function parseTestSeriesJson(data, filename) {
+  if (!data || typeof data !== 'object') { showToast('⚠️ JSON must be an object'); return null; }
+  let questions = (data.questions||[]).map((q,idx) => {
+    let qText = q.question || q.q || '';
+    if (typeof qText === 'string') qText = qText.replace(/\n/g, '<br>');
+
+    let opts = q.options || q.opts || [];
+    if (typeof opts === 'object' && !Array.isArray(opts)) {
+      opts = [opts.A||opts.a, opts.B||opts.b, opts.C||opts.c, opts.D||opts.d, opts.E||opts.e].filter(Boolean);
+    }
+    opts = opts.map(o => typeof o === 'string' ? o.replace(/\n/g, '<br>') : o);
+
+    let ans = q.correctAnswer !== undefined ? q.correctAnswer : (q.answer !== undefined ? q.answer : (q.ans !== undefined ? q.ans : null));
+    if (typeof ans === 'string') {
+      const uAns = ans.toUpperCase().trim();
+      if (/^[A-E]$/.test(uAns)) ans = uAns.charCodeAt(0) - 65;
+      else {
+        // Try to match value exactly
+        const matchIdx = opts.findIndex(o => (o||'').toString().trim().toLowerCase() === uAns.toLowerCase());
+        if (matchIdx !== -1) ans = matchIdx;
+        else ans = parseInt(ans) || 0;
+      }
+    }
+
+    return {
+      ...q, id: q.id || idx + 1,
+      q: qText,
+      opts: opts,
+      diff: q.diff || 'medium',
+      ans: ans
+    };
+  });
+  
+  if (!questions.length) { showToast('⚠️ No questions found'); return null; }
+  for (let i=0;i<questions.length;i++) {
+    const q = questions[i];
+    if (!q.q) { showToast(`⚠️ Q${i+1} missing question text`); return null; }
+    if (!Array.isArray(q.opts)||q.opts.length<2) { showToast(`⚠️ Q${i+1} invalid options`); return null; }
+    if (q.ans===undefined||q.ans===null||typeof q.ans!=='number'||q.ans<0||q.ans>=q.opts.length) { showToast(`⚠️ Q${i+1} invalid answer. Expected 0 to ${q.opts.length-1}`); return null; }
+  }
+  return questions;
+}
+
+async function handleUnifiedTestCreate() {
+  if (typeof getLoggedInUser === 'function') {
+    const _u = getLoggedInUser(); if (!_u||_u.role!=='admin') { showToast('❌ Admin access required'); return; }
+  }
+  const level = document.getElementById('create-level').value;
+  const subject = document.getElementById('create-subject').value.trim();
+  const chapter = document.getElementById('create-chapter').value.trim();
+  const duration = parseInt(document.getElementById('create-duration').value)||60;
+  const priceType = document.getElementById('create-pricing-type').value;
+  const price = parseInt(document.getElementById('create-price').value)||0;
+  const status = document.getElementById('create-status').value;
+  const startTime = document.getElementById('create-start-time').value;
+  const endTime = document.getElementById('create-end-time').value;
+  const negativeMarking = parseFloat(document.getElementById('create-negative-mark').value)||0;
+  const prize1 = parseInt(document.getElementById('create-prize-1').value)||0;
+  const prize2 = parseInt(document.getElementById('create-prize-2').value)||0;
+  const prize3 = parseInt(document.getElementById('create-prize-3').value)||0;
+  const description = document.getElementById('create-description').value.trim();
+  if (!chapter) { showToast('⚠️ Please enter a Title/Chapter'); return; }
+  const title = subject ? `${subject} - ${chapter}` : chapter;
+  const btn = document.getElementById('create-test-btn');
+  btn.disabled = true; btn.textContent = 'Processing…';
+
+  const performCreation = async (questions) => {
+    const payload = {
+      title, subject, level: level.toLowerCase(), duration,
+      totalQuestions: questions.length, status, startTime, endTime, negativeMarking,
+      prize1, prize2, prize3, description,
+      testData: { title, subject, duration, total: questions.length, level: level.toLowerCase(), questions, status, startTime, endTime, negativeMarking }
+    };
+    try {
+      const data = await apiCall('createTest', payload);
+      if (data.status === 'success') {
+        await apiCall('updatePricing', { testId: data.data?.testId||data.testId, testTitle: title, price, discountPrice: price, testType: priceType, packageName:'', status:'active' });
+        showToast(`✅ Test "${title}" created!`);
+        document.getElementById('create-chapter').value = '';
+        clearJsonFile();
+        loadManageTests();
+      } else showToast('❌ Failed: ' + (data.message||'Unknown error'));
+    } catch(e) { showToast('❌ Network error saving test.'); }
+    finally { btn.disabled = false; btn.textContent = 'Create Test'; }
+  };
+
+  if (_selectedFileForUpload) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      let raw;
+      try { raw = JSON.parse(e.target.result); }
+      catch { showToast('❌ Invalid JSON'); btn.disabled=false; btn.textContent='Create Test'; return; }
+      const qs = parseTestSeriesJson(raw, _selectedFileForUpload.name);
+      if (!qs) { btn.disabled=false; btn.textContent='Create Test'; return; }
+      performCreation(qs);
+    };
+    reader.readAsText(_selectedFileForUpload);
+  } else { performCreation([]); }
+}
+
+// ── Refresh system (manual only) ───────────────────────────────
+let _lastRefreshed = {};
+let _loadedSections = new Set();
+
+const SECTION_LOADERS = {
+  'dashboard':     () => { loadAdminDashboardStats(); loadLevel2Requests(); },
+  'manage-tests':  () => loadManageTests(),
+  'students':      () => loadAdminStudents(),
+  'analytics':     () => loadAdminAnalytics(),
+  'unlock':        () => loadLevel2Requests(),
+  'leaderboard':   () => loadAdminLeaderboard(),
+  'level2-config': () => { if (typeof window.loadLevel2Status === 'function') window.loadLevel2Status(); },
+};
+
+function _runLoader(section) {
+  const fn = SECTION_LOADERS[section];
+  if (!fn) return;
+  try { fn(); } catch(e) { console.warn('Loader error:', section, e); }
+  _lastRefreshed[section] = Date.now();
+  _loadedSections.add(section);
+  const badge = document.getElementById('refresh-badge-' + section);
+  if (badge) { badge.textContent = 'Updated'; }
+}
+
+function refreshNow(section) {
+  _runLoader(section);
+  const badge = document.getElementById('refresh-badge-' + section);
+  if (badge) {
+    badge.textContent = 'Just now';
+    badge.classList.add('fresh');
+    setTimeout(() => badge && badge.classList.remove('fresh'), 2000);
+  }
+}
+
+// Load a section once when first navigated to
+function loadSectionOnce(section) {
+  if (!_loadedSections.has(section)) _runLoader(section);
+}
+
+// ── navTo: update view and lazy-load ────────────────────────
+const VIEW_TO_SECTION = {
+  'view-dashboard':    'dashboard',
+  'view-manage-tests': 'manage-tests',
+  'view-students':     'students',
+  'view-analytics':    'analytics',
+  'view-unlock':       'unlock',
+  'view-leaderboard':  'leaderboard',
+  'view-level2-config':'level2-config',
+};
+
+// ── Init ────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    const user = typeof getLoggedInUser === 'function' ? getLoggedInUser() : null;
+    if (user) {
+      const init = (user.fullName||user.name||'A').trim().split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
+      const firstName = (user.fullName||user.name||'Admin').split(' ')[0];
+      document.getElementById('sidebar-initials').textContent = init;
+      document.getElementById('sidebar-name').textContent = user.fullName||user.name||'Admin';
+      document.getElementById('admin-user-info-small').textContent = init;
+      document.getElementById('nav-user-name').textContent = '👋 ' + firstName;
+    }
+  } catch(e) {}
+
+  // Show only dashboard view on load
+  document.querySelectorAll('.a-view').forEach(v => v.style.display = 'none');
+  const dashView = document.getElementById('view-dashboard');
+  if (dashView) dashView.style.display = 'block';
+
+  // Load only the dashboard section once on init
+  _runLoader('dashboard');
+});
+</script>
+
+<script>
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzSp2xUR32Fm24g-p9ed-uPvoYf4fjeo3H-GI3AfPZHG6AoNmTCIJGMGaGsCLr89RPy3A/exec';
+</script>
+<script src="script.js"></script>
+<script src="auth-guard.js"></script>
+<script src="admin-auth.js"></script>
+<!-- ── Content Viewer Modal ─────────────────────── -->
+<div id="contentViewerModal" class="a-modal-box" onclick="if(event.target===this)this.classList.remove('open')"
+  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9000;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto">
+  <div style="background:var(--card-bg);border-radius:14px;width:100%;max-width:720px;margin:auto;box-shadow:0 24px 64px rgba(0,0,0,0.4);overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--card-border)">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:2px">TEST CONTENT</div>
+        <div id="contentViewerTitle" style="font-size:16px;font-weight:700;color:var(--text-main)">—</div>
+      </div>
+      <button onclick="document.getElementById('contentViewerModal').classList.remove('open')"
+        style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-muted);line-height:1;padding:4px 8px">✕</button>
+    </div>
+    <div id="contentViewerBody" style="padding:20px 24px;max-height:65vh;overflow-y:auto;font-size:13.5px"></div>
+  </div>
+</div>
+
+<style>
+#contentViewerModal.open { display:flex !important; }
+@media(max-width:600px){
+  #contentViewerModal { padding:12px; }
+  #contentViewerModal > div { border-radius:10px; }
+}
+</style>
+
+</body>
+</html>
