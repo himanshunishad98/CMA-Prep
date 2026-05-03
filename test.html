@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0B1D3A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>CMAPrep Pro – Test Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>
+  // ── Backend URL — must match auth-guard.js ──────────────────
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbxit_IvLq2yy9VJ-hvM8q6lA3cuj15Vc6o1T2pylyVE04qoTEMSwZicxckEiIG7y9BWxw/exec';
+</script>
+<!-- ── Mobile-specific overrides ─────────────────────── -->
+
+<!-- Auth Guard (reads GAS_URL above; also defines APPS_SCRIPT_URL internally) -->
+<script src="auth-guard.js"></script>
+<script>
+  // Ensure user is logged in before rendering
+  if (!getLoggedInUser()) {
+    window.location.replace('index.html#login');
+  }
+</script>
+</head>
+<body>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toastMsg"></span></div>
+
+<!-- Test Header -->
+<div class="test-header">
+  <div class="test-header-info">
+    <h3 id="tp-title"></h3>
+    <p id="tp-subtitle"></p>
+    <div id="tp-back-btn" style="display:none;margin-top:12px">
+      <a href="dashboard.html" style="font-size:13px;color:var(--gold);text-decoration:none;font-weight:600">← Back to Dashboard</a>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:20px;flex-shrink:0">
+    <div class="test-timer">⏱ <span id="tp-timer">--:--</span></div>
+    <button class="btn btn-gold" onclick="showSubmitModal()">Submit Test</button>
+  </div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-bar-wrap" style="border-radius: 0; height: 4px; background: rgba(0,0,0,0.1);">
+  <div class="progress-bar" id="tp-progress" style="width: 0%; border-radius: 0;"></div>
+</div>
+
+<div class="test-layout">
+  <!-- Question Nav -->
+  <div class="test-sidebar">
+    <div class="test-sidebar-title">Questions</div>
+    <div class="q-grid" id="tp-qgrid">
+      <!-- Bubbles injected dynamically -->
+    </div>
+    <div style="margin-top:20px;font-size:11.5px;color:var(--text3)">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="width:14px;height:14px;border-radius:4px;background:var(--teal)"></div> <span id="tp-answered-count">Answered (0)</span></div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><div style="width:14px;height:14px;border-radius:4px;background:var(--gold-light);border:1.5px solid var(--gold)"></div> Current</div>
+      <div style="display:flex;align-items:center;gap:6px"><div style="width:14px;height:14px;border-radius:4px;border:1.5px solid var(--border)"></div> <span id="tp-unanswered-count">Not attempted (0)</span></div>
+    </div>
+  </div>
+
+  <!-- Question Area -->
+  <div class="test-main">
+    <div class="q-number" id="tp-qnum"></div>
+    <div class="q-text" id="tp-qtext">
+      <!-- Question text goes here -->
+    </div>
+    <div class="options-list" id="tp-options">
+      <!-- Options injected dynamically -->
+    </div>
+
+    <div class="test-nav-bar">
+      <button class="btn btn-outline" style="border-color:var(--border);color:var(--text2)" id="tp-prev-btn" onclick="prevQuestion()">← Previous</button>
+      <span style="font-size:13px;color:var(--text3);cursor:pointer;" onclick="toggleMarkReview()" id="tp-mark-btn">☆ Mark for review</span>
+      <button class="btn btn-navy" id="tp-next-btn" onclick="nextQuestion()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT SUMMARY PAGE (Initially hidden) -->
+<div id="result-summary-container" style="display:none;max-width:800px;margin:40px auto;padding:24px;">
+  <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:32px;box-shadow:0 12px 24px rgba(0,0,0,0.05);text-align:center">
+    <div style="font-size:48px;margin-bottom:16px">🎯</div>
+    <h2 style="font-family:'Sora',sans-serif;color:var(--navy);margin-bottom:8px">Test Submitted Successfully</h2>
+    <p style="color:var(--text2);margin-bottom:24px">Here is a quick summary of your performance.</p>
+    
+    <div class="rs-grid">
+      <div style="background:var(--navy);color:#fff;padding:16px;border-radius:8px">
+        <div style="font-size:12px;opacity:0.8;margin-bottom:4px">Score</div>
+        <div style="font-size:24px;font-weight:700;font-family:'IBM Plex Mono',monospace" id="rs-score">--/--</div>
+      </div>
+      <div style="background:#F0FDF4;color:#166534;border:1px solid #BBF7D0;padding:16px;border-radius:8px">
+        <div style="font-size:12px;opacity:0.8;margin-bottom:4px">Correct</div>
+        <div style="font-size:24px;font-weight:700;font-family:'IBM Plex Mono',monospace" id="rs-correct">--</div>
+      </div>
+      <div style="background:#FEF2F2;color:#991B1B;border:1px solid #FECACA;padding:16px;border-radius:8px">
+        <div style="font-size:12px;opacity:0.8;margin-bottom:4px">Wrong</div>
+        <div style="font-size:24px;font-weight:700;font-family:'IBM Plex Mono',monospace" id="rs-wrong">--</div>
+      </div>
+      <div style="background:#F1F5F9;color:#334155;border:1px solid #E2E8F0;padding:16px;border-radius:8px">
+        <div style="font-size:12px;opacity:0.8;margin-bottom:4px">Unattempted</div>
+        <div style="font-size:24px;font-weight:700;font-family:'IBM Plex Mono',monospace" id="rs-unattempted">--</div>
+      </div>
+      <div style="background:#FFFBEB;color:#92400E;border:1px solid #FDE68A;padding:16px;border-radius:8px">
+        <div style="font-size:12px;opacity:0.8;margin-bottom:4px">Time Taken</div>
+        <div style="font-size:18px;font-weight:700;font-family:'IBM Plex Mono',monospace" id="rs-time">--:--</div>
+      </div>
+    </div>
+    
+    <button class="btn btn-navy btn-lg" onclick="window.location.replace('dashboard.html')">Return to Dashboard</button>
+  </div>
+</div>
+
+<!-- ═══════════════ MODALS ═══════════════ -->
+<!-- Submit Test Modal -->
+<div class="modal-overlay" id="submit-modal" onclick="if(event.target===this)closeModal('submit-modal')">
+  <div class="modal-box">
+    <div class="modal-title">Submit Test?</div>
+    <div class="modal-sub" id="submit-modal-sub">You have attempted <strong>0 of 0</strong> questions. Are you sure you want to submit?</div>
+    <div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:8px;padding:12px 16px;font-size:13px;color:#92400E" id="submit-modal-warning">
+      ⚠️ 0 questions are unanswered. Once submitted, you cannot change your answers.
+    </div>
+    <div class="modal-actions">
+      <button class="btn" style="border:1.5px solid var(--border);color:var(--text2)" onclick="closeModal('submit-modal')">Continue Test</button>
+      <button class="btn btn-gold" id="confirm-submit-btn" onclick="finishTest()">Submit Anyway</button>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+﻿
+LineNumber Line                                                                                                        
+---------- ----                                                                                                        
+       233               <label class="a-label">Level</label>                                                          
+       241               <label class="a-label">Subject</label>                                                        
+       242               <input class="a-input" type="text" id="create-subject" placeholder="e.g. Cost Accounting">    
+       245               <label class="a-label">Chapter(s) / Title</label>                                             
+       246               <input class="a-input" type="text" id="create-chapter" placeholder="e.g. Chapter 5–7">        
+       249               <label class="a-label">Duration (mins)</label>                                                
+       250               <input class="a-input" type="number" id="create-duration" value="60">                         
+       253               <label class="a-label">Test Type</label>                                                      
+       260               <label class="a-label">Price (₹)</label>                                                      
+       261               <input class="a-input" type="number" id="create-price" value="0">                             
+       264               <label class="a-label">Status</label>                                                         
+       273               <label class="a-label">Start Time</label>                                                     
+       274               <input class="a-input" type="datetime-local" id="create-start-time">                          
+       277               <label class="a-label">End Time</label>                                                       
+       278               <input class="a-input" type="datetime-local" id="create-end-time">                            
+       281               <label class="a-label">Negative Marking</label>                                               
+       290               <label class="a-label">1st Prize (₹)</label>                                                  
+       291               <input class="a-input" type="number" id="create-prize-1" value="0">                           
+       294               <label class="a-label">2nd Prize (₹)</label>                                                  
+       295               <input class="a-input" type="number" id="create-prize-2" value="0">                           
+       298               <label class="a-label">3rd Prize (₹)</label>                                                  
+       299               <input class="a-input" type="number" id="create-prize-3" value="0">                           
+       303             <label class="a-label">Description / Syllabus</label>                                           
+       304             <textarea class="a-input" id="create-description" rows="3" placeholder="Enter test descriptio...
+       318               <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="handleJ...
+       493               <label class="a-label">Level 2 Date</label>                                                   
+       494               <input class="a-input" type="date" id="l2-date">                                              
+       497               <label class="a-label">Level 2 Time</label>                                                   
+       498               <input class="a-input" type="time" id="l2-time">                                              
+       501               <label class="a-label">Google Meet Link</label>                                               
+       502               <input class="a-input" type="url" id="l2-meet" placeholder="https://meet.google.com/xyz">     
+       505               <label class="a-label">Status</label>                                                         
+       533               <label class="a-label">Level</label>                                                          
+       541               <label class="a-label">Exam Session</label>                                                   
+       550               <label class="a-label">Paper Type</label>                                                     
+       723           <input type="text" class="a-input" style="font-weight:600;font-size:14px;width:100%" id="title_...
+       734           <label class="a-label">Level</label>                                                              
+       742           <label class="a-label">Status</label>                                                             
+       751           <label class="a-label">Subject</label>                                                            
+       752           <input class="a-input" type="text" id="subject_${t.testId}" value="${escHtml(t.subject||'')}" p...
+       755           <label class="a-label">Start Time</label>                                                         
+       756           <input type="datetime-local" class="a-input" id="start_${t.testId}" value="${t.startTime||""}">   
+       759           <label class="a-label">End Time</label>                                                           
+       760           <input type="datetime-local" class="a-input" id="end_${t.testId}" value="${t.endTime||""}">       
+       763           <label class="a-label">Duration (mins)</label>                                                    
+       764           <input class="a-input" type="number" id="duration_${t.testId}" value="${t.duration||60}">         
+       767           <label class="a-label">Test Type</label>                                                          
+       774           <label class="a-label">Price (₹)</label>                                                          
+       775           <input class="a-input" type="number" id="price_${t.testId}" value="${priceVal}">                  
+       778           <label class="a-label">Negative Marking</label>                                                   
+       787           <label class="a-label">1st Prize (₹)</label>                                                      
+       788           <input class="a-input" type="number" id="prize1_${t.testId}" value="${t.prize1||0}">              
+       791           <label class="a-label">2nd Prize (₹)</label>                                                      
+       792           <input class="a-input" type="number" id="prize2_${t.testId}" value="${t.prize2||0}">              
+       795           <label class="a-label">3rd Prize (₹)</label>                                                      
+       796           <input class="a-input" type="number" id="prize3_${t.testId}" value="${t.prize3||0}">              
+       799           <label class="a-label">Total Questions</label>                                                    
+       800           <input class="a-input" type="text" value="${t.totalQuestions||'—'}" disabled style="color:var(-...
+       804         <label class="a-label">Description / Syllabus</label>                                               
+       805         <textarea class="a-input" id="desc_${t.testId}" rows="2" style="resize:vertical" placeholder="Ent...
+
+

@@ -1,0 +1,856 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0B1D3A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>CMAPrep Pro – ICMAI 2022 Syllabus Test Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav class="topnav" id="mainNav">
+  <a class="logo" href="#" onclick="showPage('home')">
+    <div class="logo-icon">C</div>
+    <span class="logo-text">CMA<span>Prep</span> Pro</span>
+  </a>
+  <button class="hamburger" id="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+  <div class="nav-menu-container" id="nav-menu-container">
+    <div class="nav-links" id="mainNavLinks">
+      <button class="nav-link active" onclick="showPage('home')">Home</button>
+      <button class="nav-link" onclick="showPage('enroll')">Tests</button>
+    </div>
+    <!-- Nav CTA: swapped by updateNav() based on login state -->
+    <div class="nav-cta" id="nav-cta">
+      <button class="btn btn-outline btn-sm" onclick="showPage('login')">Login</button>
+      <button class="btn btn-gold btn-sm" onclick="showPage('register')">Register Free</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ TOAST ═══════════════ -->
+<div class="toast" id="toast"><span class="toast-icon" id="toastIcon">✓</span><span id="toastMsg"></span></div>
+
+<!-- ══════════════════════════════════════
+     PAGE 1: HOME
+══════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">🏆 ICMAI Syllabus 2022 — Official Test Series</div>
+    <h1>Ace Your <span>CMA Exams</span><br>Chapter by Chapter</h1>
+    <p>Structured mock tests for Foundation, Intermediate &amp; Final levels. Chapter-wise precision, exam-day confidence.</p>
+    <div class="hero-btns" id="hero-btns">
+      <button class="btn btn-gold btn-lg" onclick="showPage('register')">Start Preparing Free →</button>
+      <button class="btn btn-outline btn-lg" onclick="showPage('enroll')">Browse Test Series</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-num" id="stat-students">12,400+</div><div class="hero-stat-label">Students Enrolled</div></div>
+      <div class="hero-stat"><div class="hero-stat-num" id="stat-tests">840+</div><div class="hero-stat-label">Chapter Tests</div></div>
+      <div class="hero-stat"><div class="hero-stat-num" id="stat-passrate">96%</div><div class="hero-stat-label">Pass Rate</div></div>
+      <div class="hero-stat"><div class="hero-stat-num" id="stat-levels">3 Levels</div><div class="hero-stat-label">Foundation · Inter · Final</div></div>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div class="section">
+    <div class="section-title">🏆 Public Leaderboard</div>
+    <div class="divider-line"></div>
+    <div class="section-sub">Top performers across all CMA test series this month</div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">May 2025 — All Levels</span>
+        <div style="display:flex;gap:8px">
+          <select class="filter-select" style="padding:6px 10px;font-size:12.5px" id="select_72" name="select_72">
+            <option>All Levels</option><option>Foundation</option><option>Intermediate</option><option>Final</option>
+          </select>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="leaderboard-table">
+          <thead>
+            <tr><th style="width:60px">Rank</th><th>Student Name</th><th>Level</th><th>Tests Attempted</th><th>Avg Score</th><th>Total Points</th></tr>
+          </thead>
+          <tbody id="publicLeaderboardBody">
+            <tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text3)">⏳ Loading leaderboard...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEST SERIES -->
+  <div class="section">
+    <div class="section-title">Upcoming Test Series</div>
+    <div class="divider-line"></div>
+    <div class="section-sub">Tests organized by level, subject, and chapter as per ICMAI Syllabus 2022</div>
+
+    <div class="level-tabs" id="levelTabsRow" style="display:none">
+      <button class="level-tab active-f" onclick="filterTests('all')">🔍 All</button>
+      <button class="level-tab" onclick="filterTests('foundation')">🔵 Foundation</button>
+      <button class="level-tab" onclick="filterTests('intermediate')">🟠 Intermediate</button>
+      <button class="level-tab" onclick="filterTests('final')">🟢 Final</button>
+    </div>
+
+    <!-- Dynamic cards render here -->
+    <div class="tests-grid" id="testsGrid"></div>
+
+    <!-- Empty state -->
+    <div class="tests-empty" id="testsEmpty">
+      <div style="font-size:48px;margin-bottom:12px">📋</div>
+      <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:6px">No tests available currently</div>
+      <div style="font-size:13.5px;color:var(--text2)">New mock tests will be added soon.</div>
+    </div>
+  </div>
+
+  <!-- DOWNLOADS -->
+  <div style="background: linear-gradient(135deg,#F0F4FF 0%,#FFF8F0 100%); padding: 4px 0;">
+  <div class="section">
+    <div class="section-title">📥 Previous Year Papers &amp; Answer Keys</div>
+    <div class="divider-line"></div>
+    <div class="section-sub">Download official past papers with detailed answer keys for all CMA levels</div>
+    <div class="download-grid">
+      <div class="download-card" onclick="showToast('Downloading... (placeholder)')">
+        <div class="download-icon">📄</div>
+        <div class="download-info">
+          <div class="download-title">Foundation – Dec 2023</div>
+          <div class="download-sub">All 4 Papers · Answer Key Included</div>
+          <div class="download-size">PDF · 4.2 MB</div>
+        </div>
+        <button class="btn btn-navy btn-sm">↓</button>
+      </div>
+      <div class="download-card" onclick="showToast('Downloading... (placeholder)')">
+        <div class="download-icon">📄</div>
+        <div class="download-info">
+          <div class="download-title">Intermediate – June 2023</div>
+          <div class="download-sub">All 8 Papers · Answer Key Included</div>
+          <div class="download-size">PDF · 9.1 MB</div>
+        </div>
+        <button class="btn btn-navy btn-sm">↓</button>
+      </div>
+      <div class="download-card" onclick="showToast('Downloading... (placeholder)')">
+        <div class="download-icon">📄</div>
+        <div class="download-info">
+          <div class="download-title">Final – Dec 2023</div>
+          <div class="download-sub">All 8 Papers · Answer Key Included</div>
+          <div class="download-size">PDF · 11.4 MB</div>
+        </div>
+        <button class="btn btn-navy btn-sm">↓</button>
+      </div>
+      <div class="download-card" onclick="showToast('Downloading... (placeholder)')">
+        <div class="download-icon">📋</div>
+        <div class="download-info">
+          <div class="download-title">Foundation – June 2023</div>
+          <div class="download-sub">All 4 Papers · Suggested Answers</div>
+          <div class="download-size">PDF · 5.8 MB</div>
+        </div>
+        <button class="btn btn-navy btn-sm">↓</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+</div><!-- /page-home -->
+
+<!-- ══════════════════════════════════════
+     PAGE 2: REGISTER
+══════════════════════════════════════ -->
+<div class="page" id="page-register">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h2>Create Your Account</h2>
+      <div class="auth-sub">Register for CMA Test Series · All levels available</div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label" for="reg-name">Full Name <span>*</span></label>
+          <input class="form-input" type="text" id="reg-name" placeholder="As per CMA registration" autocomplete="name" enterkeyhint="next" name="reg-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reg-cma">CMA Registration No. <span>*</span></label>
+          <input class="form-input" type="text" id="reg-cma" placeholder="e.g. F/24/12345" autocomplete="off" inputmode="text" enterkeyhint="next" name="reg-cma">
+          <span class="form-hint">Foundation / Intermediate / Final reg. number</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reg-email">Email Address <span>*</span></label>
+          <input class="form-input" type="email" id="reg-email" placeholder="your@email.com" autocomplete="email" inputmode="email" enterkeyhint="next" name="reg-email">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reg-mobile">Mobile Number <span>*</span></label>
+          <input class="form-input" type="tel" id="reg-mobile" placeholder="+91 98765 43210" autocomplete="tel" inputmode="tel" enterkeyhint="next" name="reg-mobile">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reg-city">City / State</label>
+          <input class="form-input" type="text" id="reg-city" placeholder="e.g. Mumbai, Maharashtra" autocomplete="address-level2" enterkeyhint="next" name="reg-city">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Password <span>*</span></label>
+          <input class="form-input" type="password" id="reg-password" placeholder="Create a password (min 6 chars)" autocomplete="new-password" enterkeyhint="done" name="reg-password">
+        </div>
+        <div class="form-group full">
+          <label class="form-label" for="input_201">Level Currently Enrolled / Cleared <span>*</span></label>
+          <div class="radio-group">
+            <label class="radio-opt" for="input_201">
+              <input type="radio" name="level" value="foundation" id="input_201">
+              <div><div style="font-weight:700">Foundation</div><div style="font-size:12px;color:var(--text3)">Paper 1–4 · ICMAI Foundation level</div></div>
+              <span class="test-tag tag-foundation" style="margin-left:auto">Foundation</span>
+            </label>
+            <label class="radio-opt" for="input_206">
+              <input type="radio" name="level" value="intermediate" id="input_206">
+              <div><div style="font-weight:700">Intermediate</div><div style="font-size:12px;color:var(--text3)">Paper 5–12 · Foundation cleared</div></div>
+              <span class="test-tag tag-intermediate" style="margin-left:auto">Inter</span>
+            </label>
+            <label class="radio-opt" for="input_211">
+              <input type="radio" name="level" value="final" id="input_211">
+              <div><div style="font-weight:700">Final</div><div style="font-size:12px;color:var(--text3)">Paper 13–20 · Intermediate cleared</div></div>
+              <span class="test-tag tag-final" style="margin-left:auto">Final</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label class="form-label" for="reg-photo">Photo URL <span style="font-weight:400;color:var(--text3)">(optional)</span></label>
+          <input class="form-input" type="url" id="reg-photo" placeholder="https://example.com/photo.jpg" name="reg-photo">
+          <span class="form-hint">Paste a direct link to your photo</span>
+        </div>
+        <div class="form-group full">
+          <div style="background:#FFF8E1;border:1px solid #FFD54F;border-radius:8px;padding:12px 16px;font-size:13px;color:#5D4037">
+            📋 <strong>Data Notice:</strong> Your registration details will be stored securely in our Google Sheets database.
+          </div>
+        </div>
+      </div>
+      <div class="reg-footer" style="margin-top:24px;display:flex;gap:12px;justify-content:space-between;align-items:center">
+        <button class="btn" style="background:none;color:var(--text2);border:1.5px solid var(--border)" onclick="showPage('login')">Already registered? Login</button>
+        <button class="btn btn-gold btn-lg" id="reg-submit-btn" onclick="handleRegister()">Create Account →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 2b: LOGIN
+══════════════════════════════════════ -->
+<div class="page" id="page-login">
+  <div class="auth-wrap">
+    <div class="auth-card" style="max-width:420px">
+      <h2>Welcome Back</h2>
+      <div class="auth-sub">Login to access your CMA test dashboard</div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="form-group">
+          <label class="form-label" for="login-identifier">Email / CMA Registration No.</label>
+          <input class="form-input" type="text" id="login-identifier" placeholder="email or F/24/12345" autocomplete="username" inputmode="email" enterkeyhint="next" name="login-identifier">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input class="form-input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" enterkeyhint="go" name="login-password">
+        </div>
+        <button class="btn btn-gold" id="login-submit-btn" style="width:100%;justify-content:center;padding:12px" onclick="handleLogin()">Login to Dashboard</button>
+        <div style="text-align:center;font-size:13px;color:var(--text2)">
+          Don't have an account? <a href="#" style="color:var(--navy3);font-weight:700" onclick="showPage('register')">Register Free</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 4: ENROLL (Tests browse page)
+══════════════════════════════════════ -->
+<div class="page" id="page-enroll">
+  <div class="enroll-page">
+    <div style="margin-bottom:28px">
+      <h2 style="font-family:'Sora',sans-serif;font-size:24px;font-weight:700;color:var(--navy)">Test Enrollment</h2>
+    </div>
+
+    <!-- Dynamic enroll cards render here -->
+    <div id="enrollCardsContainer"></div>
+
+    <!-- Empty state -->
+    <div class="tests-empty" id="enrollEmpty">
+      <div style="font-size:48px;margin-bottom:12px">📋</div>
+      <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:6px">No tests available currently</div>
+      <div style="font-size:13.5px;color:var(--text2)">New mock tests will be added soon.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODALS ═══════════════ -->
+<!-- Enrollment modal scoped styles — no global impact -->
+<style>
+.enroll-grid {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  row-gap: 12px;
+  column-gap: 16px;
+  align-items: center;
+}
+.enroll-grid .label {
+  white-space: nowrap;
+  color: var(--text2);
+  font-size: 13.5px;
+}
+.enroll-grid .value {
+  text-align: right;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 13.5px;
+}
+.enroll-grid .value > * {
+  max-width: 100%;
+  display: inline-block;
+}
+.enroll-grid .test-tag {
+  display: inline-block;
+  max-width: 100%;
+  white-space: normal;
+  word-break: break-word;
+  text-align: right;
+}
+.enroll-grid .value .test-tag {
+  margin-left: 0 !important;
+}
+</style>
+
+<!-- Dynamic Enroll Confirmation Modal -->
+<div class="modal-overlay" id="enroll-modal" onclick="if(event.target===this)closeModal('enroll-modal')">
+  <div class="modal-box">
+    <div class="modal-title">Enroll in This Test</div>
+    <div class="modal-sub">You're enrolling in <strong id="modal-test-title">—</strong></div>
+    <div style="background:var(--bg);border-radius:10px;padding:16px">
+      <div class="enroll-grid">
+        <div class="label">Level</div>
+        <div class="value" id="enrollLevel"></div>
+
+        <div class="label">Date</div>
+        <div class="value" id="enrollDate">—</div>
+
+        <div class="label">Duration</div>
+        <div class="value" id="enrollDuration">—</div>
+
+        <div class="label">Fee</div>
+        <div class="value" id="enrollFee" style="color:var(--green);font-weight:700">FREE</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" style="border:1.5px solid var(--border);color:var(--text2)" onclick="closeModal('enroll-modal')">Cancel</button>
+      <button class="btn btn-gold" id="modal-confirm-btn" onclick="confirmEnroll()">Confirm Enrollment</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script src="auth-guard.js"></script>
+
+<!-- ═══════════════════════════════════════════════════
+     AUTH + ENROLL INTEGRATION — Google Apps Script
+═══════════════════════════════════════════════════ -->
+<script>
+// ─────────────────────────────────────────────
+// CONFIG — ⚠ Replace with your deployed Apps Script Web App URL
+// ─────────────────────────────────────────────
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxit_IvLq2yy9VJ-hvM8q6lA3cuj15Vc6o1T2pylyVE04qoTEMSwZicxckEiIG7y9BWxw/exec';
+console.log('✅ GAS_URL loaded:', GAS_URL);
+
+// ─────────────────────────────────────────────
+// SESSION HELPERS — delegate to auth-guard.js
+// getLoggedInUser()  → reads sessionStorage 'cmaUser'
+// saveUserSession()  → writes sessionStorage 'cmaUser'
+// clearUserSession() → removes sessionStorage 'cmaUser'
+// ─────────────────────────────────────────────
+function getSession()  { return getLoggedInUser(); }   // alias for legacy calls
+function isLoggedIn()  { return !!getLoggedInUser(); }
+
+// ─────────────────────────────────────────────
+// LOGOUT
+// ─────────────────────────────────────────────
+function logout() {
+  clearUserSession();
+  updateNav();
+  showToastCustom('Logged out successfully.');
+  showPage('home');
+}
+
+// ─────────────────────────────────────────────
+// NAV STATE — updates nav based on login status
+// ─────────────────────────────────────────────
+function updateNav() {
+  const user   = getLoggedInUser();
+  const navCta = document.getElementById('nav-cta');
+  if (!navCta) return;
+
+  const navLinks = document.getElementById('mainNavLinks');
+  const heroBtns = document.getElementById('hero-btns');
+
+  if (user) {
+    // ── Logged in ──────────────────────────────
+    const firstName = (user.name || 'Student').trim().split(' ')[0] || 'Student';
+    const isRoleAdmin = user.role === 'admin';
+    const targetPage = isRoleAdmin ? 'admin.html' : 'dashboard.html';
+    const targetName = isRoleAdmin ? 'Admin Panel' : 'Dashboard';
+
+    const roleTag = `<span style="font-size:11px;padding:2px 9px;border-radius:20px;
+                      background:#EEF2FF;color:#4338CA;font-weight:600;
+                      text-transform:capitalize;white-space:nowrap">${user.role || 'Student'}</span>`;
+
+    if (navLinks) {
+      navLinks.innerHTML = `
+        <button class="nav-link active" onclick="showPage('home')">Home</button>
+        <button class="nav-link" onclick="showPage('enroll')">Tests</button>
+      `;
+    }
+
+    navCta.innerHTML = `
+      <div class="user-dropdown-wrap" onclick="this.classList.toggle('active')" style="position:relative;cursor:pointer;display:flex;align-items:center;gap:8px">
+        <span style="font-size:13px;font-weight:600;color:var(--gold);white-space:nowrap">
+          👋 ${firstName} <span style="font-size:10px;margin-left:2px">▼</span>
+        </span>
+        ${roleTag}
+        
+        <div class="user-dropdown-menu" style="position:absolute;top:100%;right:0;margin-top:8px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;padding:8px;display:none;flex-direction:column;gap:6px;min-width:160px;box-shadow:0 10px 25px rgba(0,0,0,0.5);z-index:9999">
+          <button class="btn btn-gold btn-sm" style="width:100%;justify-content:center" onclick="event.stopPropagation();window.location.href='${targetPage}'">${targetName}</button>
+          <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;border-color:var(--red);color:var(--red)" onclick="event.stopPropagation();logout()">Logout</button>
+        </div>
+      </div>
+    `;
+    
+    if (heroBtns) {
+      heroBtns.innerHTML = `
+        <button class="btn btn-gold btn-lg" onclick="window.location.href='${targetPage}'">Go to ${targetName} →</button>
+        <button class="btn btn-outline btn-lg" onclick="showPage('enroll')">Browse Test Series</button>
+      `;
+    }
+
+    // Ensure they get redirected if somehow they are on login hash
+    if (window.location.hash === '#login' || window.location.hash === '#register') {
+      window.location.replace(targetPage);
+    }
+
+  } else {
+    // ── Logged out ─────────────────────────────
+    if (navLinks) {
+      navLinks.innerHTML = `
+        <button class="nav-link active" onclick="showPage('home')">Home</button>
+        <button class="nav-link" onclick="showPage('enroll')">Tests</button>
+      `;
+    }
+    navCta.innerHTML = `
+      <button class="btn btn-outline btn-sm" onclick="showPage('login')">Login</button>
+      <button class="btn btn-gold btn-sm" onclick="showPage('register')">Register Free</button>
+    `;
+    
+    if (heroBtns) {
+      heroBtns.innerHTML = `
+        <button class="btn btn-gold btn-lg" onclick="showPage('register')">Start Preparing Free →</button>
+        <button class="btn btn-outline btn-lg" onclick="showPage('enroll')">Browse Test Series</button>
+      `;
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────
+function showToastCustom(msg, isError = false) {
+  const toast    = document.getElementById('toast');
+  const toastMsg = document.getElementById('toastMsg');
+  const toastIcon= document.getElementById('toastIcon');
+  toastMsg.textContent  = msg;
+  toastIcon.textContent = isError ? '✕' : '✓';
+  toast.style.background = isError ? '#DC2626' : '';
+  toast.classList.add('show');
+  setTimeout(() => { toast.classList.remove('show'); toast.style.background = ''; }, 4000);
+}
+
+function setLoading(btnId, loading, defaultText) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.disabled    = loading;
+  btn.textContent = loading ? '⏳ Please wait…' : defaultText;
+}
+
+// ─────────────────────────────────────────────
+// ENROLL MODAL — session-gated, dynamic per test
+// ─────────────────────────────────────────────
+let _pendingEnroll = null;
+
+function openEnrollModal(testTitle, testLevel, testDate, testFee, testDuration) {
+  if (!isLoggedIn()) {
+    showToastCustom('Please login to enroll in a test.', true);
+    setTimeout(() => showPage('login'), 1200);
+    return;
+  }
+
+  const displayTitle = testTitle.replace(/&amp;/g, '&');
+
+  document.getElementById('modal-test-title').textContent = displayTitle;
+  document.getElementById('enrollDate').textContent = testDate || '—';
+
+  const durEl = document.getElementById('enrollDuration');
+  if (durEl) durEl.textContent = testDuration ? testDuration + ' mins' : '60 mins';
+
+  const feeEl = document.getElementById('enrollFee');
+  if (feeEl) {
+    feeEl.textContent = testFee || 'FREE';
+    feeEl.style.color = (testFee && testFee !== 'FREE') ? 'var(--navy)' : 'var(--green)';
+  }
+
+  const lvl = testLevel.toLowerCase();
+  const tagClass = lvl === 'foundation' ? 'tag-foundation'
+                 : lvl === 'intermediate' ? 'tag-intermediate'
+                 : 'tag-final';
+  const levelEl = document.getElementById('enrollLevel');
+  if (levelEl) levelEl.innerHTML = `<span class="test-tag ${tagClass}">${testLevel}</span>`;
+
+  _pendingEnroll = { testTitle: displayTitle, testLevel, testDate };
+
+  const btn = document.getElementById('modal-confirm-btn');
+  btn.textContent = 'Confirm Enrollment';
+  btn.disabled    = false;
+
+  showModal('enroll-modal');
+}
+
+async function confirmEnroll() {
+  if (!_pendingEnroll) return;
+
+  const session = getSession();
+  if (!session) {
+    closeModal('enroll-modal');
+    showToastCustom('Session expired. Please login again.', true);
+    setTimeout(() => showPage('login'), 1200);
+    return;
+  }
+
+  setLoading('modal-confirm-btn', true, 'Confirm Enrollment');
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method : 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body   : JSON.stringify({
+        action      : 'enroll',
+        email       : session.email,
+        userRole    : session.role || 'student',
+        cmaRegNo    : session.cmaRegNo,
+        studentName : session.name,
+        testTitle   : _pendingEnroll.testTitle,
+        testLevel   : _pendingEnroll.testLevel,
+        testDate    : _pendingEnroll.testDate,
+        enrollDate  : new Date().toLocaleDateString('en-IN'),
+        enrollTime  : new Date().toLocaleTimeString('en-IN'),
+        attempted   : 'No'
+      })
+    });
+
+    const data = await res.json();
+    closeModal('enroll-modal');
+
+    if (data.status === 'already_enrolled') {
+      showToastCustom('You are already enrolled in "' + _pendingEnroll.testTitle + '".', true);
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1800);
+    } else if (data.status === 'success') {
+      showToastCustom('✅ Enrolled in "' + _pendingEnroll.testTitle + '"! Redirecting to dashboard…');
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1800);
+    } else {
+      showToastCustom(data.message || 'Enrollment failed. Try again.', true);
+    }
+  } catch (err) {
+    console.error(err);
+    closeModal('enroll-modal');
+    showToastCustom('Network error. Please check your connection.', true);
+  } finally {
+    setLoading('modal-confirm-btn', false, 'Confirm Enrollment');
+    _pendingEnroll = null;
+  }
+}
+
+// ─────────────────────────────────────────────
+// ATTEMPT TEST — session-gated + logs to sheet
+// ─────────────────────────────────────────────
+async function attemptTest(testTitle, testLevel) {
+  if (!isLoggedIn()) {
+    showToastCustom('Please login to attempt a test.', true);
+    setTimeout(() => showPage('login'), 1200);
+    return;
+  }
+
+  const session = getSession();
+
+  // Log attempt to Google Sheets (non-blocking)
+  fetch(GAS_URL, {
+    method : 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body   : JSON.stringify({
+      action      : 'submitTest',
+      email       : session.email,
+      userRole    : session.role || 'student',
+      cmaRegNo    : session.cmaRegNo,
+      studentName : session.name,
+      testTitle   : testTitle,
+      testLevel   : testLevel,
+      subject     : testLevel,
+      level       : session.level || testLevel,
+      attemptLevel: 'Level 1',
+      submittedAt : new Date().toLocaleString('en-IN')
+    })
+  }).catch(() => {/* silent — never block the user */});
+
+  showToastCustom('✅ Loading test: "' + testTitle + '"…');
+  setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+}
+
+// ─────────────────────────────────────────────
+// REGISTER
+// ─────────────────────────────────────────────
+async function handleRegister() {
+  const name     = document.getElementById('reg-name').value.trim();
+  const cma      = document.getElementById('reg-cma').value.trim();
+  const email    = document.getElementById('reg-email').value.trim();
+  const mobile   = document.getElementById('reg-mobile').value.trim();
+  const city     = document.getElementById('reg-city').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const photo    = document.getElementById('reg-photo').value.trim();
+  const levelEl  = document.querySelector('input[name="level"]:checked');
+  const level    = levelEl ? levelEl.value : '';
+
+  if (!name || !cma || !email || !mobile || !password || !level) {
+    showToastCustom('Please fill all required fields.', true); return;
+  }
+  if (password.length < 6) {
+    showToastCustom('Password must be at least 6 characters.', true); return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showToastCustom('Please enter a valid email address.', true); return;
+  }
+
+  setLoading('reg-submit-btn', true, 'Create Account →');
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method : 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body   : JSON.stringify({
+        action: 'register', fullName: name, cmaRegNo: cma,
+        email, mobile, city, level, password, photoUrl: photo,
+        registrationDate: new Date().toLocaleDateString('en-IN')
+      })
+    });
+    const data = await res.json();
+
+    if (data.status === 'exists') {
+      showToastCustom('Account already exists. Please login.', true);
+    } else if (data.status === 'success') {
+      // ── Save full session via auth-guard.js ──
+      saveUserSession({
+        name,
+        email,
+        mobile,
+        cmaRegNo:     cma,
+        level,
+        profileImage: photo
+      });
+      updateNav();
+      showToastCustom('Registration successful! Redirecting…');
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+    } else {
+      showToastCustom(data.message || 'Registration failed. Try again.', true);
+    }
+  } catch (err) {
+    showToastCustom('Network error. Please check your connection.', true);
+  } finally {
+    setLoading('reg-submit-btn', false, 'Create Account →');
+  }
+}
+
+// ─────────────────────────────────────────────
+// LOGIN
+// ─────────────────────────────────────────────
+async function handleLogin() {
+  const identifier = document.getElementById('login-identifier').value.trim();
+  const password   = document.getElementById('login-password').value;
+
+  if (!identifier || !password) {
+    showToastCustom('Please enter your credentials.', true); return;
+  }
+
+  // ── DEBUG: Log payload before sending ──
+  const loginPayload = { action: 'login', identifier, password };
+  console.log('🔐 Login Payload:', { action: 'login', identifier });
+  console.log('📡 Sending request to:', GAS_URL);
+
+  setLoading('login-submit-btn', true, 'Login to Dashboard');
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method : 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body   : JSON.stringify(loginPayload)
+    });
+
+    const data = await res.json();
+    console.log('📥 Login Response:', data);
+
+    // Backend returns { status, message, data: { fullName, email, ... } }
+    const user = data.data;
+
+    if (data.status === 'success' && user) {
+      // ── Save full session via auth-guard.js ──
+      saveUserSession({
+        name:         user.fullName      || '',
+        email:        user.email         || '',
+        mobile:       user.mobile        || '',
+        cmaRegNo:     user.cmaRegNo      || '',
+        level:        user.level         || '',
+        profileImage: user.photoUrl      || '',
+        role:         user.role          || 'student'
+      });
+      updateNav();
+      showToastCustom('Login successful! Redirecting…');
+      setTimeout(() => { 
+        if (user.role === 'admin') {
+          window.location.href = 'admin.html';
+        } else {
+          window.location.href = 'dashboard.html'; 
+        }
+      }, 1200);
+    } else if (data.status === 'not_found') {
+      showToastCustom('Account not found, please register.', true);
+    } else if (data.status === 'wrong_password') {
+      showToastCustom('Incorrect password. Please try again.', true);
+    } else {
+      showToastCustom(data.message || 'Login failed. Try again.', true);
+    }
+  } catch (err) {
+    console.error('❌ Login Error:', err);
+    showToastCustom('Server not reachable. Please try again later.', true);
+  } finally {
+    setLoading('login-submit-btn', false, 'Login to Dashboard');
+  }
+}
+
+// ─────────────────────────────────────────────
+// GLOBAL STATS
+// ─────────────────────────────────────────────
+async function fetchGlobalStats() {
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'getGlobalStats' })
+    });
+    const data = await res.json();
+    if (data.status === 'success' && data.stats) {
+      const els = {
+        s: document.getElementById('stat-students'),
+        t: document.getElementById('stat-tests'),
+        p: document.getElementById('stat-passrate'),
+        l: document.getElementById('stat-levels')
+      };
+      if (els.s) els.s.textContent = data.stats.students + '+';
+      if (els.t) els.t.textContent = data.stats.tests + '+';
+      if (els.p) els.p.textContent = data.stats.passRate + '%';
+      if (els.l && data.stats.levels) els.l.textContent = data.stats.levels + ' Levels';
+    }
+  } catch (err) {
+    console.error('Failed to load global stats:', err);
+  }
+}
+
+// ─────────────────────────────────────────────
+// PUBLIC LEADERBOARD
+// ─────────────────────────────────────────────
+async function fetchPublicLeaderboard() {
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'getLeaderboard' })
+    });
+    const data = await res.json();
+    const tbody = document.getElementById('publicLeaderboardBody');
+    if (tbody && data.status === 'success') {
+      const lb = data.data?.leaderboard || data.leaderboard;
+      if (!lb || lb.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text3)">No leaderboard data available yet.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = '';
+      lb.slice(0, 10).forEach((row, i) => {
+        let rankBadge = i + 1;
+        if (i === 0) rankBadge = '🥇 1';
+        if (i === 1) rankBadge = '🥈 2';
+        if (i === 2) rankBadge = '🥉 3';
+        
+        tbody.innerHTML += `
+          <tr>
+            <td style="font-weight:bold;color:var(--navy)">${rankBadge}</td>
+            <td style="font-weight:600">${row.studentName || row.name || 'Unknown'}</td>
+            <td><span class="test-tag tag-intermediate">CMA</span></td>
+            <td>${row.testsAttempted || 0}</td>
+            <td>${row.avgScore || '0%'}</td>
+            <td style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--navy)">${row.totalPoints || 0}</td>
+          </tr>
+        `;
+      });
+    }
+  } catch (err) {
+    console.error('Failed to fetch leaderboard:', err);
+    const tbody = document.getElementById('publicLeaderboardBody');
+    if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--red)">Failed to load leaderboard.</td></tr>';
+  }
+}
+
+// ─────────────────────────────────────────────
+// INIT — runs on every page load
+// ─────────────────────────────────────────────
+// Intercept page changes to block logged-in users from auth forms
+function patchShowPage() {
+  if (typeof window.showPage === 'function') {
+    const originalShowPage = window.showPage;
+    window.showPage = function(pageId) {
+      const user = getLoggedInUser();
+      if (user && (pageId === 'login' || pageId === 'register')) {
+        window.location.href = user.role === 'admin' ? 'admin.html' : 'dashboard.html';
+        return;
+      }
+      originalShowPage(pageId);
+    };
+  }
+}
+
+// ── Mobile nav auto-close ─────────────────────────
+function closeNavMenu() {
+  const m = document.getElementById('nav-menu-container');
+  const btn = document.getElementById('mobile-menu-btn');
+  if (m) m.classList.remove('active');
+  if (btn) { btn.textContent = '☰'; btn.setAttribute('aria-expanded', 'false'); }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  patchShowPage();
+  // Update nav to reflect current login state
+  updateNav();
+  fetchGlobalStats();
+  fetchPublicLeaderboard();
+
+  // Keyboard shortcuts — login form
+  ['login-identifier','login-password'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+  });
+
+  // Keyboard shortcuts — register form
+  ['reg-name','reg-cma','reg-email','reg-mobile','reg-city','reg-password','reg-photo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') handleRegister(); });
+  });
+});
+</script>
+
+</body>
+</html>

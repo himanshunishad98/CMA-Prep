@@ -1,0 +1,104 @@
+﻿
+Filename   LineNumber Line                                                                                             
+--------   ---------- ----                                                                                             
+admin.html        233               <label class="a-label">Level</label>                                               
+admin.html        234               <select class="a-select" id="create-level">                                        
+admin.html        241               <label class="a-label">Subject</label>                                             
+admin.html        242               <input class="a-input" type="text" id="create-subject" placeholder="e.g. Cost Ac...
+admin.html        245               <label class="a-label">Chapter(s) / Title</label>                                  
+admin.html        246               <input class="a-input" type="text" id="create-chapter" placeholder="e.g. Chapter...
+admin.html        249               <label class="a-label">Duration (mins)</label>                                     
+admin.html        250               <input class="a-input" type="number" id="create-duration" value="60">              
+admin.html        253               <label class="a-label">Test Type</label>                                           
+admin.html        254               <select class="a-select" id="create-pricing-type">                                 
+admin.html        260               <label class="a-label">Price (₹)</label>                                           
+admin.html        261               <input class="a-input" type="number" id="create-price" value="0">                  
+admin.html        264               <label class="a-label">Status</label>                                              
+admin.html        265               <select class="a-select" id="create-status">                                       
+admin.html        273               <label class="a-label">Start Time</label>                                          
+admin.html        274               <input class="a-input" type="datetime-local" id="create-start-time">               
+admin.html        277               <label class="a-label">End Time</label>                                            
+admin.html        278               <input class="a-input" type="datetime-local" id="create-end-time">                 
+admin.html        281               <label class="a-label">Negative Marking</label>                                    
+admin.html        282               <select class="a-select" id="create-negative-mark">                                
+admin.html        290               <label class="a-label">1st Prize (₹)</label>                                       
+admin.html        291               <input class="a-input" type="number" id="create-prize-1" value="0">                
+admin.html        294               <label class="a-label">2nd Prize (₹)</label>                                       
+admin.html        295               <input class="a-input" type="number" id="create-prize-2" value="0">                
+admin.html        298               <label class="a-label">3rd Prize (₹)</label>                                       
+admin.html        299               <input class="a-input" type="number" id="create-prize-3" value="0">                
+admin.html        303             <label class="a-label">Description / Syllabus</label>                                
+admin.html        304             <textarea class="a-input" id="create-description" rows="3" placeholder="Enter test...
+admin.html        318               <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchan...
+admin.html        493               <label class="a-label">Level 2 Date</label>                                        
+admin.html        494               <input class="a-input" type="date" id="l2-date">                                   
+admin.html        497               <label class="a-label">Level 2 Time</label>                                        
+admin.html        498               <input class="a-input" type="time" id="l2-time">                                   
+admin.html        501               <label class="a-label">Google Meet Link</label>                                    
+admin.html        502               <input class="a-input" type="url" id="l2-meet" placeholder="https://meet.google....
+admin.html        505               <label class="a-label">Status</label>                                              
+admin.html        506               <select class="a-select" id="l2-status">                                           
+admin.html        533               <label class="a-label">Level</label>                                               
+admin.html        534               <select class="a-select">                                                          
+admin.html        541               <label class="a-label">Exam Session</label>                                        
+admin.html        542               <select class="a-select">                                                          
+admin.html        550               <label class="a-label">Paper Type</label>                                          
+admin.html        551               <select class="a-select">                                                          
+admin.html        723           <input type="text" class="a-input" style="font-weight:600;font-size:14px;width:100%"...
+admin.html        734           <label class="a-label">Level</label>                                                   
+admin.html        735           <select class="a-select" id="level_${t.testId}">                                       
+admin.html        742           <label class="a-label">Status</label>                                                  
+admin.html        743           <select class="a-select" id="status_${t.testId}">                                      
+admin.html        751           <label class="a-label">Subject</label>                                                 
+admin.html        752           <input class="a-input" type="text" id="subject_${t.testId}" value="${escHtml(t.subje...
+admin.html        755           <label class="a-label">Start Time</label>                                              
+admin.html        756           <input type="datetime-local" class="a-input" id="start_${t.testId}" value="${t.start...
+admin.html        759           <label class="a-label">End Time</label>                                                
+admin.html        760           <input type="datetime-local" class="a-input" id="end_${t.testId}" value="${t.endTime...
+admin.html        763           <label class="a-label">Duration (mins)</label>                                         
+admin.html        764           <input class="a-input" type="number" id="duration_${t.testId}" value="${t.duration||...
+admin.html        767           <label class="a-label">Test Type</label>                                               
+admin.html        768           <select class="a-select" id="pricetype_${t.testId}">                                   
+admin.html        774           <label class="a-label">Price (₹)</label>                                               
+admin.html        775           <input class="a-input" type="number" id="price_${t.testId}" value="${priceVal}">       
+admin.html        778           <label class="a-label">Negative Marking</label>                                        
+admin.html        779           <select class="a-select" id="negmark_${t.testId}">                                     
+admin.html        787           <label class="a-label">1st Prize (₹)</label>                                           
+admin.html        788           <input class="a-input" type="number" id="prize1_${t.testId}" value="${t.prize1||0}">   
+admin.html        791           <label class="a-label">2nd Prize (₹)</label>                                           
+admin.html        792           <input class="a-input" type="number" id="prize2_${t.testId}" value="${t.prize2||0}">   
+admin.html        795           <label class="a-label">3rd Prize (₹)</label>                                           
+admin.html        796           <input class="a-input" type="number" id="prize3_${t.testId}" value="${t.prize3||0}">   
+admin.html        799           <label class="a-label">Total Questions</label>                                         
+admin.html        800           <input class="a-input" type="text" value="${t.totalQuestions||'—'}" disabled style="...
+admin.html        804         <label class="a-label">Description / Syllabus</label>                                    
+admin.html        805         <textarea class="a-input" id="desc_${t.testId}" rows="2" style="resize:vertical" place...
+admin.html       1010               <select class="a-select" id="l2action_${rowKey}"                                   
+index.html         73           <select class="filter-select" style="padding:6px 10px;font-size:12.5px">               
+index.html        174           <label class="form-label">Full Name <span>*</span></label>                             
+index.html        175           <input class="form-input" type="text" id="reg-name" placeholder="As per CMA registra...
+index.html        178           <label class="form-label">CMA Registration No. <span>*</span></label>                  
+index.html        179           <input class="form-input" type="text" id="reg-cma" placeholder="e.g. F/24/12345" aut...
+index.html        183           <label class="form-label">Email Address <span>*</span></label>                         
+index.html        184           <input class="form-input" type="email" id="reg-email" placeholder="your@email.com" a...
+index.html        187           <label class="form-label">Mobile Number <span>*</span></label>                         
+index.html        188           <input class="form-input" type="tel" id="reg-mobile" placeholder="+91 98765 43210" a...
+index.html        191           <label class="form-label">City / State</label>                                         
+index.html        192           <input class="form-input" type="text" id="reg-city" placeholder="e.g. Mumbai, Mahara...
+index.html        195           <label class="form-label">Password <span>*</span></label>                              
+index.html        196           <input class="form-input" type="password" id="reg-password" placeholder="Create a pa...
+index.html        199           <label class="form-label">Level Currently Enrolled / Cleared <span>*</span></label>    
+index.html        201             <label class="radio-opt">                                                            
+index.html        202               <input type="radio" name="level" value="foundation">                               
+index.html        206             <label class="radio-opt">                                                            
+index.html        207               <input type="radio" name="level" value="intermediate">                             
+index.html        211             <label class="radio-opt">                                                            
+index.html        212               <input type="radio" name="level" value="final">                                    
+index.html        219           <label class="form-label">Photo URL <span style="font-weight:400;color:var(--text3)"...
+index.html        220           <input class="form-input" type="url" id="reg-photo" placeholder="https://example.com...
+index.html        247           <label class="form-label">Email / CMA Registration No.</label>                         
+index.html        248           <input class="form-input" type="text" id="login-identifier" placeholder="email or F/...
+index.html        251           <label class="form-label">Password</label>                                             
+index.html        252           <input class="form-input" type="password" id="login-password" placeholder="••••••••"...
+
+

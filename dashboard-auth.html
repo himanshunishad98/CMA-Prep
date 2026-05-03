@@ -1,0 +1,48 @@
+<!-- ═══════════════════════════════════════════════════
+  DASHBOARD PROTECTION — paste inside <head>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png"> of dashboard.html
+  (before any other scripts)
+════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  // Hide body immediately to prevent a flash of unauthorized content
+  document.documentElement.style.visibility = 'hidden';
+
+  // Gracefully fallback if auth-guard.js is missing or loading late
+  const getUser = typeof getLoggedInUser === 'function' 
+    ? getLoggedInUser 
+    : function() {
+        try { return JSON.parse(sessionStorage.getItem('cmaUser')); } 
+        catch (e) { return null; }
+      };
+
+  const user = getUser();
+
+  if (!user) {
+    if (typeof clearUserSession === 'function') clearUserSession();
+    else sessionStorage.removeItem('cmaUser');
+    window.location.replace('index.html#login');
+    return;
+  }
+
+  // Optional: Add Role Checking here if protecting an admin page
+  // if (user.role !== 'admin') { window.location.replace('dashboard.html'); }
+
+  // Valid session — reveal page and populate details after DOM is ready
+  document.addEventListener('DOMContentLoaded', function () {
+    document.documentElement.style.visibility = '';
+    
+    // Defer to auth-guard.js for heavy DOM population
+    if (typeof populateUserDetails === 'function') {
+      populateUserDetails(user);
+    }
+  });
+})();
+</script>
+
+<!-- 
+  NOTE: Do not duplicate logout() or getCurrentUser() logic here! 
+  Rely entirely on auth-guard.js as the single source of truth. 
+  Ensure <script src="auth-guard.js"></script> is included at the bottom of the body.
+-->
